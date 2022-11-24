@@ -4,6 +4,7 @@ plugins {
     id 'checkstyle'
     id 'com.github.spotbugs' version '5.0.9'
     id "io.freefair.lombok" version "6.6-rc1"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
 group 'org.kivilev'
@@ -59,5 +60,11 @@ compileJava.options.encoding = 'UTF-8'
 tasks.withType(JavaCompile) {
     options.with {
         encoding = 'UTF-8'
+    }
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "org.kivilev.HomeworkApplication"
     }
 }
