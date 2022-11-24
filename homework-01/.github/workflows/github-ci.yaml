@@ -1,0 +1,33 @@
+name: tests
+on: push
+jobs:
+  run_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Setup JDK Liberica
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'liberica'
+          java-version: '11'
+          cache: 'gradle'
+
+      - name: Assemble applications
+        run: ./gradlew assemble
+
+      - name: Check style and analyze code
+        run: ./gradlew check -x test
+
+      - name: Run tests
+        run: ./gradlew test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: all-checks-reports
+          path: |
+            **/build/test-results/*
+            **/build/reports/*
