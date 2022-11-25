@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="csvMapper" class="org.kivilev.dao.mapper.CsvMapper"/>
+
+    <bean id="questionDao" class="org.kivilev.dao.QuestionDaoCsvImpl">
+        <constructor-arg value="questions.csv"/>
+        <constructor-arg name="csvMapper" ref="csvMapper"/>
+    </bean>
+
+    <bean id="printQuestionService" class="org.kivilev.service.PrintQuestionServiceImpl"/>
+
+    <bean id="pollService" class="org.kivilev.service.PollServiceImpl">
+        <constructor-arg name="questionDao" ref="questionDao"/>
+        <constructor-arg name="printQuestionService" ref="printQuestionService"/>
+    </bean>
+</beans>
