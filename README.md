@@ -1,3 +1,5 @@
+![](https://github.com/kivilev/2022-11-otus-spring-kivilev/workflows/tests/badge.svg)
+
 # Otus Spring
 This repository contains homeworks for otus education course.
 

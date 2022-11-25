@@ -1,0 +1,65 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'checkstyle'
+    id 'com.github.spotbugs' version '5.0.9'
+    id "io.freefair.lombok" version "6.6-rc1"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "io.spring.dependency-management" version "1.1.0"
+}
+
+idea {
+    project {
+        languageLevel = 11
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+allprojects {
+    group "org.kivilev"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    apply plugin: "io.spring.dependency-management"
+    dependencyManagement {
+        dependencies {
+            dependency 'org.springframework:spring-context:5.3.24'
+            dependency 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+            dependency 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+            dependency 'com.opencsv:opencsv:5.7.1'
+            dependency 'org.mockito:mockito-junit-jupiter:4.9.0'
+        }
+    }
+
+    apply plugin: 'checkstyle'
+    checkstyle {
+        toolVersion '10.3.4'
+        configFile file("$project.rootDir/checkstyle.xml")
+        ignoreFailures = false
+        maxWarnings = 0
+        maxErrors = 0
+    }
+
+    apply plugin: 'com.github.spotbugs'
+    spotbugs {
+        showProgress = false
+        effort = 'max'
+        reportLevel = 'low'
+        excludeFilter = file("$project.rootDir/spotbugs-exclude.xml")
+    }
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.with {
+        encoding = 'UTF-8'
+    }
+}
+
