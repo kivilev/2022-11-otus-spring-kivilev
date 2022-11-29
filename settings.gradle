@@ -1,2 +1,3 @@
 rootProject.name = 'Spring-Homeworks'
 include 'homework-01'
+include 'homework-02'
