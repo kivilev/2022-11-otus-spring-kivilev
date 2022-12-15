@@ -1,6 +1,5 @@
 package org.kivilev.service;
 
-import lombok.val;
 import org.kivilev.dao.StudentDao;
 import org.kivilev.model.Student;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student registrationStudent() {
         Student student = inputStudentService.inputStudent();
-        val studentId = studentDao.addStudent(student);
-        student.setId(studentId);
+        studentDao.addStudent(student);
         return student;
     }
 }

@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface StudentDao {
     Optional<Student> getStudent(long id);
 
-    long addStudent(Student student);
+    void addStudent(Student student);
 }

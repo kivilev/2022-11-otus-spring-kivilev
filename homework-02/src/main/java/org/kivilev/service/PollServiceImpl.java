@@ -12,16 +12,9 @@ import org.springframework.stereotype.Service;
 public class PollServiceImpl implements PollService {
 
     private final QuestionDao questionDao;
-    private final PrintQuestionService printQuestionService;
     private final InputPollService inputPollService;
     private final ApplicationConfig applicationConfig;
     private final PollPrintResultService pollPrintResultService;
-
-    @Override
-    public void printQuestionsAndAnswers() {
-        var questions = questionDao.getQuestions();
-        questions.forEach(printQuestionService::printQuestion);
-    }
 
     @Override
     public void doPoll(Student student) {

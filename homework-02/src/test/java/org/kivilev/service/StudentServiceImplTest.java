@@ -4,6 +4,7 @@ import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.kivilev.dao.StudentDao;
 import org.kivilev.dao.StudentDaoInMemory;
+import org.kivilev.dao.StudentIdGeneratorService;
 import org.kivilev.model.Student;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,15 +18,16 @@ class StudentServiceImplTest {
     private static final int STUDENT_AGE = 22;
     private static final long STUDENT_ID = 777L;
 
-    private final StudentDao studentDao = mock(StudentDaoInMemory.class);
     private final InputStudentService inputStudentService = mock(InputStudentServiceImpl.class);
+    private final StudentIdGeneratorService studentIdGeneratorService = mock(StudentIdGeneratorService.class);
+    private final StudentDao studentDao = new StudentDaoInMemory(studentIdGeneratorService);
     private final StudentService studentService = new StudentServiceImpl(studentDao, inputStudentService);
 
     @Test
     public void registrationNewStudentShouldBeCorrect() {
         val newStudent = new Student(STUDENT_NAME, STUDENT_AGE);
         when(inputStudentService.inputStudent()).thenReturn(newStudent);
-        when(studentDao.addStudent(newStudent)).thenReturn(STUDENT_ID);
+        when(studentIdGeneratorService.getNewId()).thenReturn(STUDENT_ID);
 
         val student = studentService.registrationStudent();
 

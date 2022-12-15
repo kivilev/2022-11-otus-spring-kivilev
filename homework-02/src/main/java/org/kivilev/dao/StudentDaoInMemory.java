@@ -6,13 +6,17 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.ConcurrentMap;
 
 @Component
 public class StudentDaoInMemory implements StudentDao {
 
-    private final AtomicLong currentId = new AtomicLong(0);
-    private final ConcurrentHashMap<Long, Student> studentConcurrentHashMap = new ConcurrentHashMap<>();
+    private final StudentIdGeneratorService studentIdGeneratorService;
+    private final ConcurrentMap<Long, Student> studentConcurrentHashMap = new ConcurrentHashMap<>();
+
+    public StudentDaoInMemory(StudentIdGeneratorService studentIdGeneratorService) {
+        this.studentIdGeneratorService = studentIdGeneratorService;
+    }
 
     @Override
     public Optional<Student> getStudent(long id) {
@@ -20,10 +24,9 @@ public class StudentDaoInMemory implements StudentDao {
     }
 
     @Override
-    public long addStudent(Student student) {
-        val studentId = currentId.incrementAndGet();
+    public void addStudent(Student student) {
+        val studentId = studentIdGeneratorService.getNewId();
         student.setId(studentId);
         studentConcurrentHashMap.put(studentId, student);
-        return studentId;
     }
 }
