@@ -34,7 +34,7 @@ public class QuestionDaoCsvImpl implements QuestionDao {
         return lines.stream().map(csvMapper::fromDto).collect(Collectors.toList());
     }
 
-    public List<QuestionAnswersDto> readCsvFile() throws Exception {
+    private List<QuestionAnswersDto> readCsvFile() throws Exception {
         try (InputStream inputStream = QuestionDaoCsvImpl.class.getResourceAsStream("/" + this.csvFileName)) {
             assert inputStream != null;
             try (Reader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
