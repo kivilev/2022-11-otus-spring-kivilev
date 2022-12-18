@@ -1,0 +1,7 @@
+${AnsiColor.1}${AnsiBackground.233}██╗  ██╗ ██████╗ ███╗   ███╗███████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗     ██████╗ ██████╗${AnsiBackground.DEFAULT}
+${AnsiBackground.235}██║  ██║██╔═══██╗████╗ ████║██╔════╝██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝    ██╔═████╗╚════██╗${AnsiBackground.DEFAULT}
+${AnsiBackground.237}███████║██║   ██║██╔████╔██║█████╗  ██║ █╗ ██║██║   ██║██████╔╝█████╔╝     ██║██╔██║ █████╔╝${AnsiBackground.DEFAULT}
+${AnsiBackground.239}██╔══██║██║   ██║██║╚██╔╝██║██╔══╝  ██║███╗██║██║   ██║██╔══██╗██╔═██╗     ████╔╝██║ ╚═══██╗${AnsiBackground.DEFAULT}
+${AnsiBackground.241}██║  ██║╚██████╔╝██║ ╚═╝ ██║███████╗╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗    ╚██████╔╝██████╔╝${AnsiBackground.DEFAULT}
+${AnsiBackground.243}╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝ ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝     ╚═════╝ ╚═════╝${AnsiBackground.DEFAULT}
+${AnsiBackground.DEFAULT}${AnsiColor.DEFAULT}

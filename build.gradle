@@ -6,6 +6,7 @@ plugins {
     id "io.freefair.lombok" version "6.6-rc1"
     id "com.github.johnrengelman.shadow" version "7.1.2"
     id "io.spring.dependency-management" version "1.1.0"
+    id 'org.springframework.boot' version '2.7.6'
 }
 
 idea {
@@ -34,6 +35,8 @@ allprojects {
             dependency 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
             dependency 'com.opencsv:opencsv:5.7.1'
             dependency 'org.mockito:mockito-junit-jupiter:4.9.0'
+            dependency 'org.springframework.boot:spring-boot-starter:2.7.6'
+            dependency 'org.springframework.boot:spring-boot-starter-test:2.7.6'
         }
     }
 

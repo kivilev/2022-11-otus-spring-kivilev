@@ -1,0 +1,6 @@
+Question;RightAnswerPositions;Answer1;Answer2;Answer3;Answer4;Answer5;Answer6
+"Выберите все JVM-языки";0,1;Java;Kotlin;PL/SQL;C++;;
+"Выберите DDL-операцию";2;delee;update;truncate;select;rollback;
+"Зачем нужен having";3;"Для группировки";"Для сортировки";"Нет такой конструкции";"Для фильтрации";;
+"Spring-потрошитель это кто?";1;"Евгений Иванов";"Евгений Борисов";"Борух Семенов";;;
+"Какие модификаторы переменных можно использовать в Kotlin";0,1;"val";"var";"vam";;;

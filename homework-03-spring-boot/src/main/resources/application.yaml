@@ -1,0 +1,11 @@
+spring:
+  messages:
+    basename: "i18n/appmessages"
+    encoding: "UTF-8"
+
+polls:
+  correct-answers-minimum-count: 3
+  locale: en
+
+question-source:
+  csv-file-name: questions.csv
