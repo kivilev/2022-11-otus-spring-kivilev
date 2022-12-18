@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id "io.freefair.lombok"
     id 'org.springframework.boot'
-    id "com.github.johnrengelman.shadow"
 }
 
 version '1.0-SNAPSHOT'
@@ -18,11 +17,5 @@ test {
     useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed"
-    }
-}
-
-jar {
-    manifest {
-        attributes "Main-Class": "org.kivilev.HomeworkApplication"
     }
 }
