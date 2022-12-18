@@ -11,6 +11,8 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 test {
@@ -18,4 +20,13 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+}
+
+springBoot {
+    mainClass = 'org.kivilev.HomeworkApplication'
+}
+
+bootJar {
+    enabled = true
+    mainClass = 'org.kivilev.HomeworkApplication'
 }

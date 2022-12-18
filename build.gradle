@@ -37,6 +37,7 @@ allprojects {
             dependency 'org.mockito:mockito-junit-jupiter:4.9.0'
             dependency 'org.springframework.boot:spring-boot-starter:2.7.6'
             dependency 'org.springframework.boot:spring-boot-starter-test:2.7.6'
+            dependency "org.springframework.boot:spring-boot-configuration-processor:2.7.6"
         }
     }
 
@@ -66,3 +67,6 @@ tasks.withType(JavaCompile) {
     }
 }
 
+bootJar {
+    enabled = false
+}
