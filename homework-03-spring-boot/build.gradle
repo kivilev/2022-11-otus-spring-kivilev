@@ -22,11 +22,6 @@ test {
     }
 }
 
-springBoot {
-    mainClass = 'org.kivilev.HomeworkApplication'
-}
-
 bootJar {
     enabled = true
-    mainClass = 'org.kivilev.HomeworkApplication'
 }
