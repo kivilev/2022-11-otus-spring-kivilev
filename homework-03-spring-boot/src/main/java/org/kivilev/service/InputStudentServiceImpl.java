@@ -14,6 +14,7 @@ public class InputStudentServiceImpl implements InputStudentService {
     private final Scanner scanner;
     private final PrintStream printStream;
     private final MessageSourceLocale messageSource;
+
     public InputStudentServiceImpl(InputStream inputStream, PrintStream printStream, MessageSourceLocale messageSource) {
         this.scanner = new Scanner(inputStream, StandardCharsets.UTF_8);
         this.printStream = printStream;
