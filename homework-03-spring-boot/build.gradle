@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+    id "io.freefair.lombok"
+    id 'org.springframework.boot'
+}
+
+version '1.0-SNAPSHOT'
+
+dependencies {
+    implementation 'com.opencsv:opencsv'
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+bootJar {
+    enabled = true
+}

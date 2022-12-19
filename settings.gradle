@@ -1,3 +1,4 @@
 rootProject.name = 'Spring-Homeworks'
 include 'homework-01'
 include 'homework-02'
+include 'homework-03-spring-boot'
