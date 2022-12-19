@@ -1,9 +1,7 @@
 package org.kivilev.service;
 
-import org.kivilev.config.PollsProperties;
 import org.kivilev.model.PollResult;
 import org.kivilev.model.Student;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.io.PrintStream;
@@ -12,13 +10,11 @@ import java.io.PrintStream;
 public class PollPrintResultServiceImpl implements PollPrintResultService {
 
     private final PrintStream printStream;
-    private final MessageSource messageSource;
-    private final PollsProperties pollsProperties;
+    private final MessageSourceLocale messageSource;
 
-    public PollPrintResultServiceImpl(PrintStream printStream, MessageSource messageSource, PollsProperties pollsProperties) {
+    public PollPrintResultServiceImpl(PrintStream printStream, MessageSourceLocale messageSource) {
         this.printStream = printStream;
         this.messageSource = messageSource;
-        this.pollsProperties = pollsProperties;
     }
 
     @Override
@@ -29,9 +25,9 @@ public class PollPrintResultServiceImpl implements PollPrintResultService {
                 String.valueOf(pollResult.getWrongAnswersCount())};
 
         if (pollResult.isPassed()) {
-            printStream.print(messageSource.getMessage("recap.success", params, pollsProperties.getLocale()));
+            printStream.print(messageSource.getMessage("recap.success", params));
         } else {
-            printStream.print(messageSource.getMessage("recap.fail", params, pollsProperties.getLocale()));
+            printStream.print(messageSource.getMessage("recap.fail", params));
         }
     }
 }
