@@ -19,7 +19,6 @@ class InputStudentServiceImplTest {
     private static final int STUDENT_AGE = 22;
     private static final int WRONG_STUDENT_AGE = -22;
 
-
     @Autowired
     InputStudentService inputStudentService;
     @MockBean
