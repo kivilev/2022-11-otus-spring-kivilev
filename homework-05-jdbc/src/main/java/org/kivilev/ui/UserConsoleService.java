@@ -1,17 +1,14 @@
 package org.kivilev.ui;
 
 import lombok.AllArgsConstructor;
-import org.kivilev.service.AuthorPrintService;
+import org.kivilev.service.io.print.AuthorPrintService;
 import org.kivilev.service.AuthorService;
-import org.kivilev.service.BookPrintService;
+import org.kivilev.service.io.print.BookPrintService;
 import org.kivilev.service.BookService;
-import org.kivilev.service.GenrePrintService;
+import org.kivilev.service.io.print.GenrePrintService;
 import org.kivilev.service.GenreService;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellOption;
-
-import javax.validation.constraints.NotNull;
 
 @ShellComponent
 @AllArgsConstructor
@@ -26,17 +23,17 @@ public class UserConsoleService {
 
     @ShellMethod(value = "Добавить книгу", key = {"ab", "add-book"})
     public void addBook() {
-        //bookService.addBook();
+        bookService.addBook();
     }
 
     @ShellMethod(value = "Удалить книгу", key = {"rb", "remove-book"})
-    public void removeBook(@ShellOption(value = "-id", help = "ID книги", optOut = true) @NotNull Long bookId) {
-
+    public void removeBook() {
+        bookService.removeBook();
     }
 
     @ShellMethod(value = "Изменить название книги", key = {"ubt", "update-book-title"})
     public void updateBookTitle() {
-
+        bookService.updateBookTitle();
     }
 
     @ShellMethod(value = "Список книг", key = {"lb", "list-books"})
@@ -44,14 +41,14 @@ public class UserConsoleService {
         bookPrintService.printBooks(bookService.getAllBooks());
     }
 
-    @ShellMethod(value = "Список книг", key = {"la", "list-authors"})
+    @ShellMethod(value = "Список авторов", key = {"la", "list-authors"})
     public void showAllAuthors() {
-        authorPrintService.printAuthors(authorService.getAllAuthors());
+        authorPrintService.print(authorService.getAllAuthors());
     }
 
     @ShellMethod(value = "Список жанров", key = {"lg", "list-genres"})
     public void showAllGenres() {
-        genrePrintService.printGenres(genreService.getAllGenres());
+        genrePrintService.print(genreService.getAllGenres());
     }
 
 }
