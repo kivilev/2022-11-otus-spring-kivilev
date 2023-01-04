@@ -3,13 +3,16 @@ package org.kivilev.dao;
 import org.kivilev.model.Book;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookDao {
     List<Book> getAllBooks();
 
     void save(Book book);
 
-    void delete(long bookId);
+    void delete(long id);
 
-    void updateTitle(long bookId, String title);
+    void updateTitle(long id, String title);
+
+    Optional<Book> getBook(long id);
 }

@@ -30,8 +30,6 @@ public class GenreDaoImpl implements GenreDao {
 
     @Override
     public Optional<Genre> getGenre(Long id) {
-        return Optional.ofNullable(
-                namedParameterJdbcOperations.queryForObject(GET_GENRE_BY_ID, Map.of("id", id), GENRE_ROW_MAPPER)
-        );
+        return DaoUtils.wrapQueryForObject(namedParameterJdbcOperations, GET_GENRE_BY_ID, Map.of("id", id), GENRE_ROW_MAPPER);
     }
 }

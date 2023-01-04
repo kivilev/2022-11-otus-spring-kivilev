@@ -37,10 +37,6 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public Optional<Author> getAuthor(Long id) {
-        return Optional.ofNullable(
-                namedParameterJdbcOperations.queryForObject(GET_AUTHOR_BY_ID,
-                        Map.of("id", id),
-                        AUTHOR_ROW_MAPPER
-                ));
+        return DaoUtils.wrapQueryForObject(namedParameterJdbcOperations, GET_AUTHOR_BY_ID, Map.of("id", id), AUTHOR_ROW_MAPPER);
     }
 }
