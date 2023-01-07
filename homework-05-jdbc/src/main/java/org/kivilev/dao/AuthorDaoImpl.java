@@ -1,6 +1,6 @@
 package org.kivilev.dao;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.kivilev.model.Author;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -13,10 +13,10 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthorDaoImpl implements AuthorDao {
-    private static final String GET_ALL_AUTHORS = "select * from author";
-    private static final String GET_AUTHOR_BY_ID = "select * from author where id = :id";
+    private static final String GET_ALL_AUTHORS = "select id, name, birthday, deathday from author";
+    private static final String GET_AUTHOR_BY_ID = "select id, name, birthday, deathday from author where id = :id";
     private static final RowMapper<Author> AUTHOR_ROW_MAPPER = (resultSet, i) -> {
         long id = resultSet.getLong("id");
         String name = resultSet.getString("name");

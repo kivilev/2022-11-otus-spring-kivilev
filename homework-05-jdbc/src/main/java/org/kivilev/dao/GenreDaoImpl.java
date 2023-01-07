@@ -1,6 +1,6 @@
 package org.kivilev.dao;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.kivilev.model.Genre;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GenreDaoImpl implements GenreDao {
 
     private static final String GET_ALL_GENRES = "select id, name from genre";

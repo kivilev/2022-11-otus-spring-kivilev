@@ -1,6 +1,6 @@
 package org.kivilev.service.io.print;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.kivilev.model.Genre;
 import org.kivilev.service.io.OutputStreamData;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GenrePrintServiceImpl implements GenrePrintService {
     private final OutputStreamData outputStreamData;
 

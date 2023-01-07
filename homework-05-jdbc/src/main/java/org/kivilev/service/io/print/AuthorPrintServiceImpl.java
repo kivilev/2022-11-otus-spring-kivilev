@@ -1,6 +1,6 @@
 package org.kivilev.service.io.print;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.kivilev.model.Author;
 import org.kivilev.service.io.OutputStreamData;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthorPrintServiceImpl implements AuthorPrintService {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 

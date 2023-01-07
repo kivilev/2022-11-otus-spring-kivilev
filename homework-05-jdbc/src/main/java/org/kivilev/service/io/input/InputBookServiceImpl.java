@@ -1,6 +1,6 @@
 package org.kivilev.service.io.input;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.kivilev.model.BookFields;
 import org.kivilev.service.io.IoStreamService;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class InputBookServiceImpl implements InputBookService {
 
     private final IoStreamService ioStreamService;

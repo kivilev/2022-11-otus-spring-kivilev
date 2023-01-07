@@ -1,6 +1,6 @@
 package org.kivilev.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.kivilev.dao.BookDao;
 import org.kivilev.model.Author;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookDao bookDao;
     private final GenreService genreService;
@@ -25,8 +25,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getAllBooks() {
         return bookDao.getAllBooks().stream()
-                .peek(book -> book.setAuthor(authorService.getAuthor(book.getAuthor().getId())))
-                .peek(book -> book.setGenre(genreService.getGenre(book.getGenre().getId())))
+                .map(book -> {
+                    book.setAuthor(authorService.getAuthor(book.getAuthor().getId()));
+                    book.setGenre(genreService.getGenre(book.getGenre().getId()));
+                    return book;
+                })
                 .collect(Collectors.toList());
     }
 

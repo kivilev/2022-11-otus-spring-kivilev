@@ -1,6 +1,6 @@
 package org.kivilev.service.io.print;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.kivilev.model.Book;
 import org.kivilev.service.io.OutputStreamData;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BookPrintServiceImpl implements BookPrintService {
     private final OutputStreamData outputStreamData;
     private final AuthorPrintService authorPrintService;

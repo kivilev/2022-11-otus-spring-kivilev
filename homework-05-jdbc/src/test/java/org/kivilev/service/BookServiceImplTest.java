@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.kivilev.dao.BookDao;
 import org.kivilev.exception.ObjectNotFoundException;
 import org.kivilev.model.Author;
-import org.kivilev.model.Book;
 import org.kivilev.model.BookFields;
 import org.kivilev.model.Genre;
 import org.kivilev.service.io.input.InputBookService;
@@ -63,8 +62,8 @@ class BookServiceImplTest {
         Mockito.verify(bookDao, times(1)).save(argThat(
                 book -> TITLE.equals(book.getTitle()) &&
                         Objects.equals(book.getCreatedYear(), CREATED_YEAR) &&
-                        isCorrectGenre(book) &&
-                        isCorrectAuthor(book)
+                        isCorrectGenre(book.getGenre()) &&
+                        isCorrectAuthor(book.getAuthor())
         ));
     }
 
@@ -117,13 +116,13 @@ class BookServiceImplTest {
         Mockito.verify(bookDao, times(1)).updateTitle(NOT_EXISTED_BOOK_ID, newTitle);
     }
 
-    private boolean isCorrectAuthor(Book book) {
-        return Objects.equals(book.getAuthor().getId(), AUTHOR_ID) &&
-                AUTHOR_NAME.equals(book.getAuthor().getName());
+    private boolean isCorrectAuthor(Author author) {
+        return Objects.equals(author.getId(), AUTHOR_ID) &&
+                AUTHOR_NAME.equals(author.getName());
     }
 
-    private boolean isCorrectGenre(Book book) {
-        return Objects.equals(book.getGenre().getId(), GENRE_ID) &&
-                GENRE_NAME.equals(book.getGenre().getName());
+    private boolean isCorrectGenre(Genre genre) {
+        return Objects.equals(genre.getId(), GENRE_ID) &&
+                GENRE_NAME.equals(genre.getName());
     }
 }

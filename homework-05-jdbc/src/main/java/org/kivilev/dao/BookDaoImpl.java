@@ -1,6 +1,6 @@
 package org.kivilev.dao;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.kivilev.model.Author;
 import org.kivilev.model.Book;
 import org.kivilev.model.Genre;
@@ -16,11 +16,11 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BookDaoImpl implements BookDao {
 
-    private static final String GET_ALL_BOOKS = "select * from book b ";
-    private static final String GET_BOOK_BY_ID = "select * from book b where b.id = :id";
+    private static final String GET_ALL_BOOKS = "select id, title, created_year, author_id, genre_id from book b ";
+    private static final String GET_BOOK_BY_ID = "select id, title, created_year, author_id, genre_id from book b where b.id = :id";
 
     private static final String INSERT_ROW = "insert into book(title, created_year, author_id, genre_id) values (:title, :created_year, :author_id, :genre_id)";
     private static final String UPDATE_TITLE = "update book set title = :title where id = :id";

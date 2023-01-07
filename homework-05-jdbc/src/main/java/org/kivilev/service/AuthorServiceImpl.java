@@ -1,6 +1,6 @@
 package org.kivilev.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.kivilev.dao.AuthorDao;
 import org.kivilev.exception.ObjectNotFoundException;
 import org.kivilev.model.Author;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorDao authorDao;

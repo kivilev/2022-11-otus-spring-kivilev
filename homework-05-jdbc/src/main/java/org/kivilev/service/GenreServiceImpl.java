@@ -1,6 +1,6 @@
 package org.kivilev.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.kivilev.dao.GenreDao;
 import org.kivilev.exception.ObjectNotFoundException;
 import org.kivilev.model.Genre;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
     private final GenreDao genreDao;
 
