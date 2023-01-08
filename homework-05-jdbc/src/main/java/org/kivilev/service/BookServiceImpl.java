@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +23,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getAllBooks() {
-        return bookDao.getAllBooks().stream()
-                .map(book -> {
-                    book.setAuthor(authorService.getAuthor(book.getAuthor().getId()));
-                    book.setGenre(genreService.getGenre(book.getGenre().getId()));
-                    return book;
-                })
-                .collect(Collectors.toList());
+        var books = bookDao.getAllBooks();
+        books.forEach(book -> {
+            book.setAuthor(authorService.getAuthor(book.getAuthor().getId()));
+            book.setGenre(genreService.getGenre(book.getGenre().getId()));
+        });
+        return books;
     }
 
     @Override
