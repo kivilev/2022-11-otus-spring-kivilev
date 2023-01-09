@@ -39,6 +39,8 @@ allprojects {
             dependency 'org.springframework.boot:spring-boot-starter-test:2.7.6'
             dependency 'org.springframework.boot:spring-boot-configuration-processor:2.7.6'
             dependency 'org.springframework.shell:spring-shell-starter:2.1.4'
+            dependency 'org.springframework.boot:spring-boot-starter-jdbc:2.7.6'
+            dependency 'com.h2database:h2:2.1.214'
         }
     }
 
