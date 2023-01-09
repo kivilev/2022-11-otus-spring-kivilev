@@ -23,12 +23,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getAllBooks() {
-        var books = bookDao.getAllBooks();
-        books.forEach(book -> {
-            book.setAuthor(authorService.getAuthor(book.getAuthor().getId()));
-            book.setGenre(genreService.getGenre(book.getGenre().getId()));
-        });
-        return books;
+        return bookDao.getAllBooks();
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,9 +25,13 @@ class BookDaoImplTest {
     private static final long EXISTED_BOOK_ID_1 = 1L;
     private static final String BOOK_TITLE_1 = "Killing in castle";
     private static final Integer BOOK_CREATED_DATE_1 = 1920;
-    private static final Long BOOK_AUTHOR_ID_1 = 4L;
-    private static final Long BOOK_GENRE_ID_1 = 1L;
+    private static final Long GENRE_ID_1 = 1L;
+    private static final String GENRE_NAME_1 = "детектив";
     private static final long NOT_EXISTED_BOOK_ID = -1L;
+    private static final Long AUTHOR_ID_4 = 4L;
+    private static final String AUTHOR_NAME_4 = "Агата Кристи";
+    private static final LocalDate AUTHOR_BIRTHDAY_4 = LocalDate.of(1899, 2, 1);
+    private static final LocalDate AUTHOR_DEATHDAY_4 = LocalDate.of(1968, 1, 1);
 
     @Autowired
     BookDao bookDao;
@@ -58,11 +63,14 @@ class BookDaoImplTest {
     @Test
     @DisplayName("Сохранение книги с валидными значениями должно проходить без ошибок")
     public void savingNewBookWithValidValuesShouldBeCorrected() {
-        Book newBook = new Book(null, BOOK_TITLE_1, BOOK_CREATED_DATE_1, new Author(BOOK_AUTHOR_ID_1), new Genre(BOOK_GENRE_ID_1));
+        Book newBook = new Book(null, BOOK_TITLE_1, BOOK_CREATED_DATE_1,
+                new Author(AUTHOR_ID_4, AUTHOR_NAME_4, AUTHOR_BIRTHDAY_4, AUTHOR_DEATHDAY_4),
+                new Genre(GENRE_ID_1, GENRE_NAME_1));
 
         bookDao.save(newBook);
-        var bookOptional = bookDao.getBook(newBook.getId());
 
+        var bookId = newBook.getId();
+        var bookOptional = bookDao.getBook(bookId);
         assertBook(bookOptional, newBook.getId());
     }
 
@@ -106,7 +114,10 @@ class BookDaoImplTest {
         assertEquals(id, book.getId());
         assertEquals(BOOK_TITLE_1, book.getTitle());
         assertEquals(BOOK_CREATED_DATE_1, book.getCreatedYear());
-        assertEquals(BOOK_GENRE_ID_1, book.getGenre().getId());
-        assertEquals(BOOK_AUTHOR_ID_1, book.getAuthor().getId());
+        assertEquals(GENRE_ID_1, book.getGenre().getId());
+        assertEquals(AUTHOR_ID_4, book.getAuthor().getId());
+        assertEquals(AUTHOR_NAME_4, book.getAuthor().getName());
+        assertEquals(AUTHOR_BIRTHDAY_4, book.getAuthor().getBirthDay());
+        assertEquals(AUTHOR_DEATHDAY_4, book.getAuthor().getDeathDay());
     }
 }

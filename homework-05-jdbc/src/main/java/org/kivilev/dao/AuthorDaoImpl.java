@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.kivilev.dao.DaoUtils.getNullLocalDate;
+
 @Repository
 @RequiredArgsConstructor
 public class AuthorDaoImpl implements AuthorDao {
@@ -21,9 +23,7 @@ public class AuthorDaoImpl implements AuthorDao {
         long id = resultSet.getLong("id");
         String name = resultSet.getString("name");
         LocalDate birthday = resultSet.getDate("birthday").toLocalDate();
-
-        var resultDeathday = resultSet.getDate("deathday");
-        LocalDate deathday = resultDeathday != null ? resultDeathday.toLocalDate() : null;
+        LocalDate deathday = getNullLocalDate(resultSet, "deathday");
 
         return new Author(id, name, birthday, deathday);
     };

@@ -11,16 +11,32 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static org.kivilev.dao.DaoUtils.getNullLocalDate;
 
 @Repository
 @RequiredArgsConstructor
 public class BookDaoImpl implements BookDao {
 
-    private static final String GET_ALL_BOOKS = "select id, title, created_year, author_id, genre_id from book b ";
-    private static final String GET_BOOK_BY_ID = "select id, title, created_year, author_id, genre_id from book b where b.id = :id";
+    private static final String GET_ALL_BOOKS =
+            "select b.id, b.title, b.created_year, " +
+                    " g.id genre_id, g.name genre_name, " +
+                    " a.id author_id, a.name author_name, a.birthday author_birthday, a.deathday author_deathday\n" +
+                    " from book b " +
+                    " left join genre g on g.id = b.genre_id " +
+                    " left join author a on a.id = author_id";
+    private static final String GET_BOOK_BY_ID =
+            "select b.id, b.title, b.created_year, " +
+                    " g.id genre_id, g.name genre_name, " +
+                    " a.id author_id, a.name author_name, a.birthday author_birthday, a.deathday author_deathday\n" +
+                    " from book b \n" +
+                    " left join genre g on g.id = b.genre_id \n" +
+                    " left join author a on a.id = author_id \n" +
+                    "where b.id = :id";
 
     private static final String INSERT_ROW = "insert into book(title, created_year, author_id, genre_id) values (:title, :created_year, :author_id, :genre_id)";
     private static final String UPDATE_TITLE = "update book set title = :title where id = :id";
@@ -29,9 +45,19 @@ public class BookDaoImpl implements BookDao {
         long id = resultSet.getLong("id");
         String title = resultSet.getString("title");
         int createdYear = resultSet.getInt("created_year");
+
         long genreId = resultSet.getLong("genre_id");
+        String genreName = resultSet.getString("genre_name");
+
         long authorId = resultSet.getLong("author_id");
-        return new Book(id, title, createdYear, new Author(authorId), new Genre(genreId));
+        String authorName = resultSet.getString("author_name");
+        LocalDate authorBirthday = resultSet.getDate("author_birthday").toLocalDate();
+        LocalDate authorDeathday = getNullLocalDate(resultSet, "author_deathday");
+
+        return new Book(id, title, createdYear,
+                new Author(authorId, authorName, authorBirthday, authorDeathday),
+                new Genre(genreId, genreName)
+        );
     };
 
     private final NamedParameterJdbcOperations namedParameterJdbcOperations;

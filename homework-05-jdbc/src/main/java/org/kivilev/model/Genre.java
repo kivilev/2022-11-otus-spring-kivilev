@@ -8,8 +8,4 @@ import lombok.Getter;
 public class Genre {
     private Long id;
     private String name;
-
-    public Genre(Long id) {
-        this.id = id;
-    }
 }
