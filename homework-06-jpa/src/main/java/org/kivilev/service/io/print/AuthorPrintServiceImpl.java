@@ -28,6 +28,4 @@ public class AuthorPrintServiceImpl implements AuthorPrintService {
         var deathday = dateToString(author.getDeathday(), DATE_TIME_FORMATTER);
         outputStreamData.format("[%d] %s (%s-%s)\n", author.getId(), author.getName(), birthday, deathday);
     }
-
-
 }

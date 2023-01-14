@@ -34,9 +34,8 @@ drop table if exists book_comment;
 create table book_comment
 (
     id           bigserial primary key,
-    book_id      bigint not null,
+    book_id      bigint references book(id) on delete cascade,
     text         text   not null,
-    create_dtime timestamp with time zone,
-    foreign key (book_id) references book
+    create_dtime timestamp with time zone
 );
 create index book_comment_book_id_idx on book_comment (book_id);

@@ -12,5 +12,5 @@ public interface InputBookService {
 
     Pair<Long, String> getNewTitle();
 
-    public long getBookId();
+    long getBookId();
 }

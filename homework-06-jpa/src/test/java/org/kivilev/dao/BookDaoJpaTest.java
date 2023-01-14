@@ -9,14 +9,15 @@ import org.kivilev.model.BookComment;
 import org.kivilev.model.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -26,25 +27,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@Import({BookDaoJpa.class, AuthorDaoJpa.class, GenreDaoJpa.class, BookCommentDaoJpa.class})
+@Import({BookDaoJpa.class, AuthorDaoJpa.class, GenreDaoJpa.class})
 class BookDaoJpaTest {
 
     private static final long NOT_EXISTED_BOOK_ID = -100;
-    private List<Genre> genres;
-    private List<Author> authors;
-
+    private List<Genre> genres = Collections.emptyList();
+    private List<Author> authors = Collections.emptyList();
     @Autowired
-    BookDao bookDao;
+    private BookDao bookDao;
     @Autowired
-    AuthorDao authorDao;
+    private AuthorDao authorDao;
     @Autowired
-    GenreDao genreDao;
-
+    private GenreDao genreDao;
     @Autowired
-    BookCommentDao bookCommentDao;
-
-    @PersistenceContext
-    EntityManager entityManager;
+    private TestEntityManager testEntityManager;
 
     @BeforeEach
     void getAllDictionaries() {
@@ -55,9 +51,9 @@ class BookDaoJpaTest {
     @Test
     @DisplayName("Получение всех книг должно вернуть все существующие книги")
     public void getAllBooksShouldReturnAllExistedBooks() {
-        var expectedBookCount = 3;
-        Book book1 = new Book(null, "Book title 1", 1988, getAuthor(0), getGenre(0), Collections.emptyList());
-        Book book2 = new Book(null, "Book title 2", 1900, getAuthor(1), getGenre(1), Collections.emptyList());
+        final var expectedBookCount = 3;
+        Book book1 = new Book(null, "Book title 1", 1988, getAuthor(0), getGenre(0), Collections.singletonList(getDefaultBookComment()));
+        Book book2 = getDefaultBook();
         Book book3 = new Book(null, "Book title 3", 1922, getAuthor(2), getGenre(2), Collections.emptyList());
         createBook(book1);
         createBook(book2);
@@ -71,6 +67,15 @@ class BookDaoJpaTest {
         assertBook(book1, actualBooks.get(0));
         assertBook(book2, actualBooks.get(1));
         assertBook(book3, actualBooks.get(2));
+    }
+
+    @Test
+    @DisplayName("Получение всех книг когда нет данных в БД должно вернуть пустой список")
+    public void getAllBooksWithoutDataInDatabaseShouldReturnEmptyList() {
+        var expectedBookCount = 0;
+        var actualBooks = bookDao.getAllBooks();
+
+        assertEquals(expectedBookCount, actualBooks.size());
     }
 
     @Test
@@ -94,36 +99,13 @@ class BookDaoJpaTest {
     }
 
     @Test
-    @DisplayName("Получение книги с комментариями возвращает все комментарии к книге")
-    public void gettingBookWithCommentsShouldReturnAllExistingComments() {
-        var expectedCommentCount = 2;
-        Book book = getDefaultBook();
-        book = createBook(book);
-        Long actualBookId = book.getId();
-        BookComment bookComment1 = new BookComment(null, actualBookId, "Text1", LocalDateTime.of(2021, 1, 1, 1, 1, 1));
-        BookComment bookComment2 = new BookComment(null, actualBookId, "Text2", LocalDateTime.of(2022, 1, 1, 1, 1, 1));
-        bookComment1 = bookCommentDao.save(bookComment1);
-        bookComment2 = bookCommentDao.save(bookComment2);
-        entityManager.refresh(book);
-
-        var actualBookOptional = bookDao.getBook(actualBookId);
-
-        assertTrue(actualBookOptional.isPresent());
-        var actualBook = actualBookOptional.get();
-        assertEquals(expectedCommentCount, actualBook.getComments().size());
-        var actualComments = actualBook.getComments().stream().sorted(Comparator.comparingLong(BookComment::getId)).collect(Collectors.toList());
-        assertComment(bookComment1, actualComments.get(0));
-        assertComment(bookComment2, actualComments.get(1));
-    }
-
-    @Test
     @DisplayName("Сохранение книги с валидными значениями должно проходить без ошибок")
-    public void savingNewBookWithValidValuesShouldBeCorrected() {
+    public void savingNewBookWithvaridvaruesShouldBeCorrected() {
         Book newBook = getDefaultBook();
 
         newBook = bookDao.save(newBook);
 
-        var actualBookOptional = bookDao.getBook(newBook.getId());
+        var actualBookOptional = getBook(newBook.getId());
         assertTrue(actualBookOptional.isPresent());
         assertBook(newBook, actualBookOptional.get());
     }
@@ -132,12 +114,12 @@ class BookDaoJpaTest {
     @DisplayName("Удаление существующей книги должно проходить успешно")
     public void deletingExistedBookShouldBeSuccessful() {
         Book newBook = getDefaultBook();
-        newBook = bookDao.save(newBook);
-        Long bookId = newBook.getId();
+        newBook = createBook(newBook);
+        var bookId = newBook.getId();
 
         bookDao.delete(newBook);
 
-        var bookOptional = bookDao.getBook(bookId);
+        var bookOptional = getBook(bookId);
         assertFalse(bookOptional.isPresent());
     }
 
@@ -154,14 +136,14 @@ class BookDaoJpaTest {
     @DisplayName("Обновление наименования существующей книги должно проходить успешно")
     public void updatingTitleExistedBookShouldBeSuccessful() {
         Book newBook = getDefaultBook();
-        newBook = bookDao.save(newBook);
-        Long bookId = newBook.getId();
+        var book = createBook(newBook);
+        Long bookId = book.getId();
+
         String newTitle = UUID.randomUUID().toString();
+        book.setTitle(newTitle);
+        bookDao.save(book);
 
-        newBook.setTitle(newTitle);
-        bookDao.save(newBook);
-
-        var actualBookOptional = bookDao.getBook(bookId);
+        var actualBookOptional = getBook(bookId);
         assertTrue(actualBookOptional.isPresent());
         var actualBook = actualBookOptional.get();
         assertEquals(newTitle, actualBook.getTitle());
@@ -176,11 +158,23 @@ class BookDaoJpaTest {
     }
 
     private Book getDefaultBook() {
-        return new Book(null, "Default book title", 1988, getAuthor(0), getGenre(0), Collections.emptyList());
+        List<BookComment> comments = new ArrayList<>();
+        comments.add(getDefaultBookComment());
+        comments.add(getDefaultBookComment());
+        return new Book(null, UUID.randomUUID().toString(), 1988, getAuthor(0), getGenre(0), comments);
+    }
+
+    private BookComment getDefaultBookComment() {
+        return new BookComment(null, UUID.randomUUID().toString(), LocalDateTime.now());
     }
 
     private Book createBook(Book book) {
-        return bookDao.save(book);
+        testEntityManager.persist(book);
+        return book;
+    }
+
+    private Optional<Book> getBook(Long id) {
+        return Optional.ofNullable(testEntityManager.find(Book.class, id));
     }
 
     private static void assertBook(Book expectedBook, Book actualBook) {
@@ -188,11 +182,7 @@ class BookDaoJpaTest {
         assertEquals(expectedBook.getCreatedYear(), actualBook.getCreatedYear());
         assertEquals(expectedBook.getAuthor(), actualBook.getAuthor());
         assertEquals(expectedBook.getGenre(), actualBook.getGenre());
-    }
+        assertEquals(expectedBook.getComments(), actualBook.getComments());
 
-    private static void assertComment(BookComment expectedComment, BookComment actualComment) {
-        assertEquals(expectedComment.getBookId(), actualComment.getBookId());
-        assertEquals(expectedComment.getText(), actualComment.getText());
-        assertEquals(expectedComment.getCreateDateTime(), actualComment.getCreateDateTime());
     }
 }

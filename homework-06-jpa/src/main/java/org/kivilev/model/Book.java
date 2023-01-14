@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -29,10 +28,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "book",
-        indexes = {
-                @Index(name = "book_author_id_idx", columnList = "author_id"),
-                @Index(name = "book_genre_id_idx", columnList = "genre_id")
-        })
+        indexes = {@Index(name = "book_author_id_idx", columnList = "author_id"), @Index(name = "book_genre_id_idx", columnList = "genre_id")})
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,9 +44,8 @@ public class Book {
     @OneToOne(targetEntity = Genre.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "genre_id", nullable = false, foreignKey = @ForeignKey(name = "book_genre_fk"))
     private Genre genre;
-    @OneToMany(targetEntity = BookComment.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(targetEntity = BookComment.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "book_id", foreignKey = @ForeignKey(name = "book_comment_fk"))
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 2)
+    @Fetch(FetchMode.SUBSELECT)
     private List<BookComment> comments;
 }

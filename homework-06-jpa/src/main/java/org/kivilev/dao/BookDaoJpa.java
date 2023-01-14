@@ -14,7 +14,7 @@ import java.util.Optional;
 public class BookDaoJpa implements BookDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Override
     public List<Book> getAllBooks() {

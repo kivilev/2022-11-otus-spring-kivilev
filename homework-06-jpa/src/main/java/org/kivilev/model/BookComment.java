@@ -24,8 +24,6 @@ public class BookComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name = "book_id", nullable = false)
-    Long bookId;
     @Column(name = "text", nullable = false, length = 10000)
     String text;
     @Column(name = "create_dtime", nullable = false)

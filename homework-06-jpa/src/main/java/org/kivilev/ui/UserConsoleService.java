@@ -14,6 +14,7 @@ import org.kivilev.service.io.print.BookPrintService;
 import org.kivilev.service.io.print.GenrePrintService;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -30,7 +31,6 @@ public class UserConsoleService {
     private final BookCommentService bookCommentService;
     private final InputBookService inputBookService;
     private final InputBookCommentService inputBookCommentService;
-
 
     @ShellMethod(value = "Добавить книгу", key = {"ab", "add-book"})
     public void addBook() {
@@ -51,11 +51,13 @@ public class UserConsoleService {
     }
 
     @ShellMethod(value = "Список книг", key = {"lb", "list-books"})
+    @Transactional
     public void showAllBooks() {
         bookPrintService.print(bookService.getAllBooks());
     }
 
     @ShellMethod(value = "Информация по одной книге", key = {"ob", "one-book"})
+    @Transactional
     public void showBook() {
         long bookId = inputBookService.getBookId();
         bookPrintService.print(bookService.getBook(bookId));
