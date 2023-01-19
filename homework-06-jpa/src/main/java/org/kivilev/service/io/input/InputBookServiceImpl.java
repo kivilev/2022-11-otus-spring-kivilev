@@ -2,7 +2,7 @@ package org.kivilev.service.io.input;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
-import org.kivilev.model.BookFields;
+import org.kivilev.ui.model.BookFields;
 import org.kivilev.service.io.IoStreamService;
 import org.springframework.stereotype.Service;
 
@@ -44,4 +44,9 @@ public class InputBookServiceImpl implements InputBookService {
         return ioStreamService.inputLongWithLabel("Введите id книги: ");
     }
 
+    @Override
+    public long getCommentsBookId() {
+        ioStreamService.println("~~Все комментарии книги~~");
+        return ioStreamService.inputLongWithLabel("Id книги: ");
+    }
 }

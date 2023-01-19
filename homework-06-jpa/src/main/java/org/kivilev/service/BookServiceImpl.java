@@ -6,7 +6,7 @@ import org.kivilev.dao.BookDao;
 import org.kivilev.exception.ObjectNotFoundException;
 import org.kivilev.model.Author;
 import org.kivilev.model.Book;
-import org.kivilev.model.BookFields;
+import org.kivilev.ui.model.BookFields;
 import org.kivilev.model.Genre;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

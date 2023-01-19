@@ -1,4 +1,4 @@
-package org.kivilev.model;
+package org.kivilev.ui.model;
 
 public enum BookFields {
     ID,

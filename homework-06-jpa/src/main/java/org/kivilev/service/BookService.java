@@ -2,7 +2,7 @@ package org.kivilev.service;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.kivilev.model.Book;
-import org.kivilev.model.BookFields;
+import org.kivilev.ui.model.BookFields;
 
 import java.util.List;
 import java.util.Map;

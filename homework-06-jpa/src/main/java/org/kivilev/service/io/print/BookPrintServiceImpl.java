@@ -2,6 +2,7 @@ package org.kivilev.service.io.print;
 
 import lombok.RequiredArgsConstructor;
 import org.kivilev.model.Book;
+import org.kivilev.model.BookComment;
 import org.kivilev.service.io.OutputStreamData;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,12 @@ public class BookPrintServiceImpl implements BookPrintService {
         genrePrintService.print(book.getGenre());
 
         outputStreamData.print("~~ Comments: \n");
-        bookCommentPrintService.print(book.getComments());
+        printComments(book.getComments());
         outputStreamData.print("\n");
+    }
+
+    @Override
+    public void printComments(List<BookComment> bookComments) {
+        bookCommentPrintService.print(bookComments);
     }
 }

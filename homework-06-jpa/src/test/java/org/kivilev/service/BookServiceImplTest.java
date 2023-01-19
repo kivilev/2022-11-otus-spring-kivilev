@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.kivilev.dao.BookDao;
 import org.kivilev.exception.ObjectNotFoundException;
 import org.kivilev.model.Author;
-import org.kivilev.model.BookFields;
+import org.kivilev.ui.model.BookFields;
 import org.kivilev.model.Genre;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

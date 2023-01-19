@@ -1,7 +1,7 @@
 package org.kivilev.service.io.input;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.kivilev.model.BookFields;
+import org.kivilev.ui.model.BookFields;
 
 import java.util.Map;
 
@@ -13,4 +13,6 @@ public interface InputBookService {
     Pair<Long, String> getNewTitle();
 
     long getBookId();
+
+    long getCommentsBookId();
 }
