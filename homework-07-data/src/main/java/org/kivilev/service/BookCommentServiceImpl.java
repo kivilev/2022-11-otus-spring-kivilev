@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,8 +40,7 @@ public class BookCommentServiceImpl implements BookCommentService {
 
         var bookOptional = bookRepository.findById(bookComment.getId());
         var book = bookOptional.orElseThrow(ObjectNotFoundException::new);
-        var actualComments = book.getComments().stream().filter(comment -> !Objects.equals(comment.getId(), removeId)).collect(Collectors.toList());
-        book.setComments(actualComments);
+        book.getComments().remove(bookComment);
         bookRepository.save(book);
     }
 }
