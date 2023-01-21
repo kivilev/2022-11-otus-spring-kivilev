@@ -3,6 +3,7 @@ package org.kivilev.service;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.kivilev.dao.repository.BookRepository;
 import org.kivilev.exception.ObjectNotFoundException;
 import org.kivilev.model.Author;
 import org.kivilev.ui.model.BookFields;
@@ -47,7 +48,7 @@ class BookServiceImplTest {
     @MockBean
     private AuthorService authorService;
     @MockBean
-    private BookDao bookDao;
+    private BookRepository bookDao;
 
     @Test
     @DisplayName("Создание книги с корректными параметрами происходит успешно")
@@ -84,11 +85,11 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("Удаление несуществующей книги должно завершаться ошибкой")
-    public void deleteNotExistedBookShouldThrowException() {
-        Mockito.when(bookDao.getBook(NOT_EXISTED_BOOK_ID)).thenReturn(Optional.empty());
+    @DisplayName("Удаление несуществующей книги не должно завершаться ошибкой")
+    public void deleteNotExistedBookShouldNotThrowException() {
+        Mockito.when(bookDao.findById(NOT_EXISTED_BOOK_ID)).thenReturn(Optional.empty());
 
-        assertThrows(ObjectNotFoundException.class, () -> bookService.removeBook(NOT_EXISTED_BOOK_ID));
+        bookService.removeBook(NOT_EXISTED_BOOK_ID);
     }
 
     @Test
@@ -96,7 +97,7 @@ class BookServiceImplTest {
     public void changeTitleNotExistedBookShouldThrowException() {
         String newTitle = "новое название";
 
-        Mockito.when(bookDao.getBook(NOT_EXISTED_BOOK_ID)).thenReturn(Optional.empty());
+        Mockito.when(bookDao.findById(NOT_EXISTED_BOOK_ID)).thenReturn(Optional.empty());
 
         assertThrows(ObjectNotFoundException.class, () -> bookService.updateBookTitle(Pair.of(NOT_EXISTED_BOOK_ID, newTitle)));
     }

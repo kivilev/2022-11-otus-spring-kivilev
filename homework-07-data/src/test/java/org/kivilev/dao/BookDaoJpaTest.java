@@ -3,6 +3,9 @@ package org.kivilev.dao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.kivilev.dao.repository.AuthorRepository;
+import org.kivilev.dao.repository.BookRepository;
+import org.kivilev.dao.repository.GenreRepository;
 import org.kivilev.model.Author;
 import org.kivilev.model.Book;
 import org.kivilev.model.BookComment;
@@ -10,7 +13,6 @@ import org.kivilev.model.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,29 +25,26 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-//@Import({BookDaoJpa.class, AuthorDaoRepo.class, GenreDaoJpa.class})
 class BookDaoJpaTest {
-/*
     private static final long NOT_EXISTED_BOOK_ID = -100;
     private List<Genre> genres = Collections.emptyList();
     private List<Author> authors = Collections.emptyList();
     @Autowired
-    private BookDao bookDao;
+    private BookRepository bookDao;
     @Autowired
-    private AuthorDao authorDao;
+    private AuthorRepository authorDao;
     @Autowired
-    private GenreDao genreDao;
+    private GenreRepository genreDao;
     @Autowired
     private TestEntityManager testEntityManager;
 
     @BeforeEach
     void getAllDictionaries() {
-        genres = genreDao.getAllGenres();
-        authors = authorDao.getAllAuthors();
+        genres = genreDao.findAll();
+        authors = authorDao.findAll();
     }
 
     @Test
@@ -59,7 +58,7 @@ class BookDaoJpaTest {
         createBook(book2);
         createBook(book3);
 
-        var actualBooks = bookDao.getAllBooks().stream()
+        var actualBooks = bookDao.findAll().stream()
                 .sorted(Comparator.comparingLong(Book::getId))
                 .collect(Collectors.toList());
 
@@ -73,7 +72,7 @@ class BookDaoJpaTest {
     @DisplayName("Получение всех книг когда нет данных в БД должно вернуть пустой список")
     public void getAllBooksWithoutDataInDatabaseShouldReturnEmptyList() {
         var expectedBookCount = 0;
-        var actualBooks = bookDao.getAllBooks();
+        var actualBooks = bookDao.findAll();
 
         assertEquals(expectedBookCount, actualBooks.size());
     }
@@ -84,7 +83,7 @@ class BookDaoJpaTest {
         Book book = getDefaultBook();
         Long bookId = createBook(book).getId();
 
-        var actualBookOptional = bookDao.getBook(bookId);
+        var actualBookOptional = bookDao.findById(bookId);
 
         assertTrue(actualBookOptional.isPresent());
         assertBook(book, actualBookOptional.get());
@@ -93,7 +92,7 @@ class BookDaoJpaTest {
     @Test
     @DisplayName("Получение не существующей книги должно вернуть пустой объект")
     public void gettingNotExistedBookShouldReturnEmptyOptional() {
-        var actualBookOptional = bookDao.getBook(NOT_EXISTED_BOOK_ID);
+        var actualBookOptional = bookDao.findById(NOT_EXISTED_BOOK_ID);
 
         assertFalse(actualBookOptional.isPresent());
     }
@@ -105,7 +104,7 @@ class BookDaoJpaTest {
 
         newBook = bookDao.save(newBook);
 
-        var actualBookOptional = getBook(newBook.getId());
+        var actualBookOptional = findById(newBook.getId());
         assertTrue(actualBookOptional.isPresent());
         assertBook(newBook, actualBookOptional.get());
     }
@@ -119,17 +118,17 @@ class BookDaoJpaTest {
 
         bookDao.delete(newBook);
 
-        var bookOptional = getBook(bookId);
+        var bookOptional = findById(bookId);
         assertFalse(bookOptional.isPresent());
     }
 
     @Test
-    @DisplayName("Удаление книги не в контексте должно возбудить ошибку")
-    public void deletingNotExistedBookInPersistenceContextShouldThrowException() {
+    @DisplayName("Удаление книги не в контексте не должно возбудить ошибку")
+    public void deletingNotExistedBookInPersistenceContextShouldNotThrowException() {
         Book newBook = getDefaultBook();
         newBook.setId(NOT_EXISTED_BOOK_ID);
 
-        assertThrows(IllegalArgumentException.class, () -> bookDao.delete(newBook));
+        bookDao.delete(newBook);
     }
 
     @Test
@@ -143,7 +142,7 @@ class BookDaoJpaTest {
         book.setTitle(newTitle);
         bookDao.save(book);
 
-        var actualBookOptional = getBook(bookId);
+        var actualBookOptional = findById(bookId);
         assertTrue(actualBookOptional.isPresent());
         var actualBook = actualBookOptional.get();
         assertEquals(newTitle, actualBook.getTitle());
@@ -173,7 +172,7 @@ class BookDaoJpaTest {
         return book;
     }
 
-    private Optional<Book> getBook(Long id) {
+    private Optional<Book> findById(Long id) {
         return Optional.ofNullable(testEntityManager.find(Book.class, id));
     }
 
@@ -184,5 +183,5 @@ class BookDaoJpaTest {
         assertEquals(expectedBook.getGenre(), actualBook.getGenre());
         assertEquals(expectedBook.getComments(), actualBook.getComments());
 
-    }*/
+    }
 }
