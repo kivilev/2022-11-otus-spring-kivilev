@@ -20,14 +20,12 @@ public class BookUiServiceImpl implements BookUiService {
     private final InputBookService inputBookService;
 
     @Override
-    @Transactional
     public void showBook() {
         long bookId = inputBookService.getBookId();
         bookPrintService.print(bookService.getBook(bookId));
     }
 
     @Override
-    @Transactional
     public void showAllBooks() {
         bookPrintService.print(bookService.getAllBooks());
     }
@@ -51,7 +49,7 @@ public class BookUiServiceImpl implements BookUiService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public void showBookComments() {
         long bookId = inputBookService.getCommentsBookId();
         var book = bookService.getBook(bookId);
