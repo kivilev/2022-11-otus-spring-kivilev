@@ -20,6 +20,7 @@ dependencies {
 }
 
 test {
+    systemProperty "file.encoding", "utf-8"
     useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed"
