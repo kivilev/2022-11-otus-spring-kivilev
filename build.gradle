@@ -20,6 +20,9 @@ idea {
     }
 }
 
+def mongockVersion = "4.3.8"
+def springBootVersion = "2.7.6"
+
 allprojects {
     group "org.kivilev"
 
@@ -36,14 +39,18 @@ allprojects {
             dependency 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
             dependency 'com.opencsv:opencsv:5.7.1'
             dependency 'org.mockito:mockito-junit-jupiter:4.9.0'
-            dependency 'org.springframework.boot:spring-boot-starter:2.7.6'
-            dependency 'org.springframework.boot:spring-boot-starter-test:2.7.6'
-            dependency 'org.springframework.boot:spring-boot-configuration-processor:2.7.6'
+            dependency "org.springframework.boot:spring-boot-starter:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-configuration-processor:$springBootVersion"
             dependency 'org.springframework.shell:spring-shell-starter:2.1.4'
-            dependency 'org.springframework.boot:spring-boot-starter-jdbc:2.7.6'
-            dependency 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.6'
+            dependency "org.springframework.boot:spring-boot-starter-jdbc:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
             dependency 'com.h2database:h2:2.1.214'
             dependency 'org.apache.commons:commons-lang3:3.12.0'
+            dependency "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"
+            dependency 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.4.11'
+            dependency "com.github.cloudyrock.mongock:mongock-spring-v5:$mongockVersion"
+            dependency "com.github.cloudyrock.mongock:mongodb-springdata-v3-driver:$mongockVersion"
         }
     }
 
