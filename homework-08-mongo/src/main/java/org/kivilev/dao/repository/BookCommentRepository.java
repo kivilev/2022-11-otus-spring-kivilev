@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface BookCommentRepository extends MongoRepository<BookComment, String> {
     List<BookComment> findAllByBook_Id(String bookId, PageRequest pageRequest);
+
     List<BookComment> findAllByBook_Id(String bookId);
 
 }
