@@ -23,7 +23,7 @@ public class BookPrintServiceImpl implements BookPrintService {
 
     @Override
     public void print(Book book) {
-        outputStreamData.format("[%d] Title: %s. Created: %s\n", book.getId(), book.getTitle(), book.getCreatedYear());
+        outputStreamData.format("[%s] Title: %s. Created: %s\n", book.getId(), book.getTitle(), book.getCreatedYear());
 
         outputStreamData.print("~~ Author: ");
         authorPrintService.print(book.getAuthor());
@@ -31,13 +31,21 @@ public class BookPrintServiceImpl implements BookPrintService {
         outputStreamData.print("~~ Genre: ");
         genrePrintService.print(book.getGenre());
 
-        outputStreamData.print("~~ Comments: \n");
-        printComments(book.getComments());
+        outputStreamData.print("~~ Last N comments: \n");
+        printComments(book.getLastTopComments());
         outputStreamData.print("\n");
     }
 
     @Override
     public void printComments(List<BookComment> bookComments) {
         bookCommentPrintService.print(bookComments);
+    }
+
+    @Override
+    public void printCommentsWithTop(List<BookComment> topComments, List<BookComment> allComments) {
+        outputStreamData.print("~~ Last N comments: \n");
+        printComments(topComments);
+        outputStreamData.print("~~ All comments: \n");
+        printComments(allComments);
     }
 }

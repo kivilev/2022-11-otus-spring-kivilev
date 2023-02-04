@@ -1,21 +1,34 @@
 package org.kivilev.service;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.kivilev.dao.repository.BookRepository;
+import org.kivilev.exception.ObjectNotFoundException;
+import org.kivilev.model.Author;
+import org.kivilev.model.Genre;
 import org.kivilev.ui.model.BookFields;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.times;
 
 @SpringBootTest
 class BookServiceImplTest {
 
     private static final Integer CREATED_YEAR = 2020;
     private static final String TITLE = "Название";
-    private static final Long AUTHOR_ID = 1L;
-    private static final Long GENRE_ID = 2L;
+    private static final String AUTHOR_ID = "1";
+    private static final String GENRE_ID = "2";
     private static final String GENRE_NAME = "Жанр";
     private static final String AUTHOR_NAME = "Имя автора";
     private static final LocalDate BIRTHDAY = LocalDate.of(1900, 1, 2);
@@ -35,8 +48,8 @@ class BookServiceImplTest {
     @MockBean
     private AuthorService authorService;
     @MockBean
-    private BookRepository bookDao;
-/*
+    private BookRepository bookRepository;
+
     @Test
     @DisplayName("Создание книги с корректными параметрами происходит успешно")
     public void addingBookWithCorrectDataShouldBeSuccessful() {
@@ -45,7 +58,7 @@ class BookServiceImplTest {
 
         bookService.addBook(CORRECT_BOOK_FIELDS);
 
-        Mockito.verify(bookDao, times(1)).save(argThat(
+        Mockito.verify(bookRepository, times(1)).save(argThat(
                 book -> TITLE.equals(book.getTitle()) &&
                         Objects.equals(book.getCreatedYear(), CREATED_YEAR) &&
                         isCorrectGenre(book.getGenre()) &&
@@ -74,7 +87,7 @@ class BookServiceImplTest {
     @Test
     @DisplayName("Удаление несуществующей книги не должно завершаться ошибкой")
     public void deleteNotExistedBookShouldNotThrowException() {
-        Mockito.when(bookDao.findById(NOT_EXISTED_BOOK_ID)).thenReturn(Optional.empty());
+        Mockito.when(bookRepository.findById(NOT_EXISTED_BOOK_ID)).thenReturn(Optional.empty());
 
         bookService.removeBook(NOT_EXISTED_BOOK_ID);
     }
@@ -84,7 +97,7 @@ class BookServiceImplTest {
     public void changeTitleNotExistedBookShouldThrowException() {
         String newTitle = "новое название";
 
-        Mockito.when(bookDao.findById(NOT_EXISTED_BOOK_ID)).thenReturn(Optional.empty());
+        Mockito.when(bookRepository.findById(NOT_EXISTED_BOOK_ID)).thenReturn(Optional.empty());
 
         assertThrows(ObjectNotFoundException.class, () -> bookService.updateBookTitle(Pair.of(NOT_EXISTED_BOOK_ID, newTitle)));
     }
@@ -97,5 +110,5 @@ class BookServiceImplTest {
     private boolean isCorrectGenre(Genre genre) {
         return Objects.equals(genre.getId(), GENRE_ID) &&
                 GENRE_NAME.equals(genre.getName());
-    }*/
+    }
 }

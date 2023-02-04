@@ -5,9 +5,15 @@ spring:
   mongodb:
     embedded:
       version: 5.0.0
+
 mongock:
-  runner-type: "ApplicationRunner" # default
-  #runner-type: "InitializingBean"
+  #runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
   change-logs-scan-package:
     - org.kivilev.mongock.changelog
-  enabled: false
+  mongo-db:
+    write-concern:
+      journal: false
+
+library:
+  count-top-comments: 2

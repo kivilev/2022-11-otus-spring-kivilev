@@ -18,7 +18,7 @@ public class InputBookServiceImpl implements InputBookService {
     public Map<BookFields, Object> getNewBook() {
         ioStreamService.println("~~Создание новой книги~~");
         var title = ioStreamService.inputStringWithLabel("Название книги: ");
-        var year = ioStreamService.inputStringWithLabel("Год создания: ");
+        var year = ioStreamService.inputIntWithLabel("Год создания: ");
         var authorId = ioStreamService.inputStringWithLabel("Id автора: ");
         var genreId = ioStreamService.inputStringWithLabel("Id жанра: ");
         return Map.of(BookFields.TITLE, title, BookFields.CREATED_YEAR, year, BookFields.AUTHOR_ID, authorId, BookFields.GENRE_ID, genreId);

@@ -19,6 +19,6 @@ public class GenrePrintServiceImpl implements GenrePrintService {
 
     @Override
     public void print(Genre genre) {
-        outputStreamData.format("[%d] %s\n", genre.getId(), genre.getName());
+        outputStreamData.format("[%s] %s\n", genre.getId(), genre.getName());
     }
 }

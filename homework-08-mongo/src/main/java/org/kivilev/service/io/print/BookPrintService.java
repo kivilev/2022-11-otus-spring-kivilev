@@ -11,4 +11,5 @@ public interface BookPrintService {
     void print(Book book);
 
     void printComments(List<BookComment> bookComments);
+    void printCommentsWithTop(List<BookComment> topComments, List<BookComment> allComments);
 }

@@ -2,15 +2,21 @@ package org.kivilev.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
+import org.kivilev.config.LibraryProperties;
 import org.kivilev.dao.repository.BookCommentRepository;
 import org.kivilev.dao.repository.BookRepository;
 import org.kivilev.exception.ObjectNotFoundException;
+import org.kivilev.model.Book;
 import org.kivilev.model.BookComment;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +25,7 @@ public class BookCommentServiceImpl implements BookCommentService {
 
     private final BookCommentRepository bookCommentRepository;
     private final BookRepository bookRepository;
+    private final LibraryProperties libraryProperties;
 
     @Override
     @Transactional
@@ -27,8 +34,12 @@ public class BookCommentServiceImpl implements BookCommentService {
         var bookOptional = bookRepository.findById(bookId);
         var book = bookOptional.orElseThrow(ObjectNotFoundException::new);
         var text = newData.getRight();
-        var bookComment = new BookComment(null, text, LocalDateTime.now(clock));
-        book.getComments().add(bookComment);
+
+        var bookComment = new BookComment(text, LocalDateTime.now(clock).truncatedTo(ChronoUnit.MILLIS), book);
+        bookCommentRepository.save(bookComment);
+
+        var newComments = getTopComments(book);
+        book.setLastTopComments(newComments);
         bookRepository.save(book);
     }
 
@@ -37,10 +48,25 @@ public class BookCommentServiceImpl implements BookCommentService {
     public void removeComment(String removeId) {
         var bookCommentOptional = bookCommentRepository.findById(removeId);
         var bookComment = bookCommentOptional.orElseThrow(ObjectNotFoundException::new);
+        bookCommentRepository.delete(bookComment);
 
-        var bookOptional = bookRepository.findById(bookComment.getId());
+        var bookOptional = bookRepository.findById(bookComment.getBook().getId());
         var book = bookOptional.orElseThrow(ObjectNotFoundException::new);
-        book.getComments().remove(bookComment);
+
+        var newComments = getTopComments(book);
+        book.setLastTopComments(newComments);
         bookRepository.save(book);
+    }
+
+    @Override
+    public List<BookComment> getAllComments(String bookId) {
+        return bookCommentRepository.findAllByBook_Id(bookId);
+    }
+
+    private List<BookComment> getTopComments(Book book) {
+        return bookCommentRepository.findAllByBook_Id(
+                book.getId(),
+                PageRequest.of(0, libraryProperties.getCountTopComments(), Sort.by("createDateTime").descending())
+        );
     }
 }

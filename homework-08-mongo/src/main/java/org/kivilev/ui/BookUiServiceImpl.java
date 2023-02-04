@@ -2,6 +2,7 @@ package org.kivilev.ui;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
+import org.kivilev.service.BookCommentService;
 import org.kivilev.service.BookService;
 import org.kivilev.service.io.input.InputBookService;
 import org.kivilev.service.io.print.BookPrintService;
@@ -16,6 +17,7 @@ import java.util.Map;
 public class BookUiServiceImpl implements BookUiService {
 
     private final BookService bookService;
+    private final BookCommentService bookCommentService;
     private final BookPrintService bookPrintService;
     private final InputBookService inputBookService;
 
@@ -53,6 +55,7 @@ public class BookUiServiceImpl implements BookUiService {
     public void showBookComments() {
         var bookId = inputBookService.getCommentsBookId();
         var book = bookService.getBook(bookId);
-        bookPrintService.printComments(book.getComments());
+        var allComments = bookCommentService.getAllComments(bookId);
+        bookPrintService.printCommentsWithTop(book.getLastTopComments(), allComments);
     }
 }

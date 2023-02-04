@@ -26,6 +26,6 @@ public class BookCommentPrintServiceImpl implements BookCommentPrintService {
     @Override
     public void print(BookComment comment) {
         var createDateTime = dateTimeToString(comment.getCreateDateTime(), DATE_TIME_FORMATTER);
-        outputStreamData.format("[%d - %s] %s\n", comment.getId(), createDateTime, comment.getText());
+        outputStreamData.format("[%s - %s] %s\n", comment.getId(), createDateTime, comment.getText());
     }
 }
