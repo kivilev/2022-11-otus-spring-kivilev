@@ -281,7 +281,9 @@
         <!-- <module name="JavadocVariable"/> invalid -->
         <!-- <module name="MissingJavadocType"/> invalid -->
         <!-- <module name="WriteTag"/> invalid -->
-        <module name="MethodName"/>
+        <module name="MethodName">
+            <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$"/>
+        </module>
         <module name="ConstantName"/>
         <module name="SingleLineJavadoc"/>
         <module name="EmptyCatchBlock">
