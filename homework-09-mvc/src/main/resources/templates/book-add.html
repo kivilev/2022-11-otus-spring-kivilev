@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        h3 {
+            background-image: url("../static/listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+        .errors {
+            color: red;
+        }
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{/listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- book adding -->
+<form id="add-form" action="/books/add.html" th:action="@{/books/add}" th:method="post" th:object="${book}">
+    <h3>New book info:</h3>
+
+    <div class="row">
+        <label for="book-name-input">Title:</label>
+        <input id="book-name-input" name="title" type="text" value=""/>
+        <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong book title error</div>
+    </div>
+
+    <div class="row">
+        <label for="book-created-year-input">Created year:</label>
+        <input id="book-created-year-input" name="createdYear" type="text" value=""/>
+         <div class="errors" th:if="${#fields.hasErrors('createdYear')}" th:errors="*{createdYear}">Wrong book created year error</div>
+    </div>
+
+    <div class="row">
+        <label for="book-author-input">Author Id:</label>
+        <input id="book-author-input" name="authorId" type="text" value=""/>
+<!--
+         <div class="errors" th:if="${#fields.hasErrors('authorId')}" th:errors="*{authorId}">Wrong book author id error</div>
+-->
+    </div>
+
+    <div class="row">
+        <label for="book-genre-input">Genre Id:</label>
+        <input id="book-genre-input" name="genreId" type="text" value=""/>
+<!--
+         <div class="errors" th:if="${#fields.hasErrors('genreId')}" th:errors="*{genreId}">Wrong book genre id error</div>
+-->
+    </div>
+
+    <div class="row">
+        <button type="submit" >Save</button>
+        <a href="/books" th:href="@{/}">
+            <button type="button">Cancel</button>
+        </a>
+    </div>
+</form>
+
+</body>
+</html>
