@@ -60,9 +60,16 @@
         <td th:text="${comment.id}">1</td>
         <td th:text="${comment.text}">John Doe</td>
         <td th:text="${comment.createDateTime}">John Doe</td>
+        <td>
+            <form id="delete-form" action="/comments.html" th:action="@{/comments/delete(bookId=${book_id})}" th:method="post" >
+                <input type="hidden" name = "bookId" id="book-id-input" th:value="${book_id}" value="1"/>
+                <input type="hidden" name = "commentId" id="comment-id-input" th:value="${comment.id}" value="1"/>
+                <button type="submit">Delete</button>
+            </form>
+        </td>
     </tr>
     <tr>
-        <td colspan="3">
+        <td colspan="4">
 
             <form id="edit-form" action="/comments.html" th:action="@{/comments(bookId=${book_id})}" th:method="post" >
                 <h4>Add new comment:</h4>
@@ -72,7 +79,7 @@
                 </div>
 
                 <div class="row">
-                    <label for="book-name-input">Title:</label>
+                    <label for="book-name-input">Text:</label>
                     <input id="book-name-input" name="text" type="text" th:value="*{text}" value="John Doe"/>
                 </div>
                 <br/>

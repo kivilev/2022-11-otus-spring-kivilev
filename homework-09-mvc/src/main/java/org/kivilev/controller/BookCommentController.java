@@ -40,7 +40,7 @@ public class BookCommentController {
 
     @PostMapping
     public String addComment(@RequestParam("bookId") Long bookId,
-                              @Valid @ModelAttribute("new_comment") NewCommentRequestDto dto,
+                              @Valid @ModelAttribute("comment") NewCommentRequestDto dto,
                               Model model) {
 
         bookCommentService.addComment(Pair.of(dto.getBookId(), dto.getText()));
@@ -53,5 +53,19 @@ public class BookCommentController {
         return "comments";
     }
 
+    @PostMapping("/delete")
+    public String removeComment(@RequestParam("bookId") Long bookId,
+                             Long commentId,
+                             Model model) {
+
+        bookCommentService.removeComment(bookId, commentId);
+
+        var book = bookService.getBook(bookId);
+        var comments = book.getComments();
+        model.addAttribute("book_id", book.getId());
+        model.addAttribute("book_title", book.getTitle());
+        model.addAttribute("comments", comments);
+        return "comments";
+    }
 }
 

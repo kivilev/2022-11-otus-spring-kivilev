@@ -34,11 +34,11 @@ public class BookCommentServiceImpl implements BookCommentService {
 
     @Override
     @Transactional
-    public void removeComment(Long removeId) {
+    public void removeComment(Long bookId, Long removeId) {
         var bookCommentOptional = bookCommentRepository.findById(removeId);
         var bookComment = bookCommentOptional.orElseThrow(ObjectNotFoundException::new);
 
-        var bookOptional = bookRepository.findById(bookComment.getId());
+        var bookOptional = bookRepository.findById(bookId);
         var book = bookOptional.orElseThrow(ObjectNotFoundException::new);
         book.getComments().remove(bookComment);
         bookRepository.save(book);
