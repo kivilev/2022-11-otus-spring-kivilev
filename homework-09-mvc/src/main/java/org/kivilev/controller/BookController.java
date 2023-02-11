@@ -18,33 +18,31 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("books")
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
     private final BookDtoMapper bookDtoMapper;
 
-    @GetMapping
+    @GetMapping("books")
     public String listBooks(Model model) {
         var books = bookService.getAllBooks();
         model.addAttribute("books", books);
         return "books";
     }
 
-    @GetMapping("/edit")
+    @GetMapping("books/edit")
     public String editPage(@RequestParam("id") long id, Model model) {
         var book = bookService.getBook(id);
         model.addAttribute("book", book);
         return "book-title-edit";
     }
 
-    @PostMapping("/edit")
+    @PostMapping("books/edit")
     public String saveTitle(@Valid @ModelAttribute("book") BookChangeTitleDtoRequest dto,
                             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -54,13 +52,13 @@ public class BookController {
         return "redirect:/books";
     }
 
-    @GetMapping("/add")
+    @GetMapping("books/add")
     public String newPage(NewBookDtoRequest dto, Model model) {
         model.addAttribute("book", new Book());
         return "book-add";
     }
 
-    @PostMapping("/add")
+    @PostMapping("books/add")
     public String saveNewBook(@Valid @ModelAttribute("book") NewBookDtoRequest dto,
                               BindingResult bindingResult,
                               Model model) {

@@ -15,20 +15,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("comments")
 public class BookCommentController {
 
     private final BookCommentService bookCommentService;
     private final BookService bookService;
 
-    @GetMapping
+    @GetMapping("comments")
     public String listComments(@RequestParam("bookId") Long bookId, Model model) {
         var book = bookService.getBook(bookId);
         var comments = book.getComments();
@@ -38,7 +36,7 @@ public class BookCommentController {
         return "comments";
     }
 
-    @PostMapping
+    @PostMapping("comments")
     public String addComment(@RequestParam("bookId") Long bookId,
                               @Valid @ModelAttribute("comment") NewCommentRequestDto dto,
                               Model model) {
@@ -53,7 +51,7 @@ public class BookCommentController {
         return "comments";
     }
 
-    @PostMapping("/delete")
+    @PostMapping("comments/delete")
     public String removeComment(@RequestParam("bookId") Long bookId,
                              Long commentId,
                              Model model) {

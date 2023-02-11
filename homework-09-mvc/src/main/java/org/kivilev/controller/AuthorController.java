@@ -10,16 +10,14 @@ import org.kivilev.service.AuthorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("authors")
 @RequiredArgsConstructor
 public class AuthorController {
 
     private final AuthorService authorService;
 
-    @GetMapping
+    @GetMapping("authors")
     public String listAuthors(Model model) {
         var authors = authorService.getAllAuthors();
         model.addAttribute("authors", authors);

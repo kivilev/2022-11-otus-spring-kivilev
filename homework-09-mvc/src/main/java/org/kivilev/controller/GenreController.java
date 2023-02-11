@@ -10,15 +10,13 @@ import org.kivilev.service.GenreService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("genres")
 @RequiredArgsConstructor
 public class GenreController {
     private final GenreService genreService;
 
-    @GetMapping
+    @GetMapping("genres")
     public String listGenres(Model model) {
         var genres = genreService.getAllGenres();
         model.addAttribute("genres", genres);
