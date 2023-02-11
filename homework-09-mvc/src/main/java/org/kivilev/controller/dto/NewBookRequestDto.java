@@ -15,10 +15,11 @@ import javax.validation.constraints.Positive;
 
 @Getter
 @AllArgsConstructor
-public class NewBookDtoRequest {
+public class NewBookRequestDto {
     @NotBlank
     private String title;
     @NotNull
+    @Positive
     @Digits(integer = 4, fraction = 0)
     private Integer createdYear;
     @NotNull

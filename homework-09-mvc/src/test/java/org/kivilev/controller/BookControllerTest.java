@@ -5,12 +5,13 @@
 
 package org.kivilev.controller;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kivilev.controller.dto.NewBookDtoRequest;
+import org.kivilev.controller.dto.NewBookRequestDto;
 import org.kivilev.controller.mapper.BookDtoMapper;
+import org.kivilev.service.AuthorService;
 import org.kivilev.service.BookService;
+import org.kivilev.service.GenreService;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,10 @@ class BookControllerTest {
     @MockBean
     private BookService bookService;
     @MockBean
+    private AuthorService authorService;
+    @MockBean
+    private GenreService genreService;
+    @MockBean
     private BookDtoMapper bookDtoMapper;
 
     @Autowired
@@ -59,24 +64,27 @@ class BookControllerTest {
     @Test
     @DisplayName("Отправка корректных данных книги создает книгу")
     public void sendingCorrectBookDataShouldCreateBook() throws Exception {
-        NewBookDtoRequest newBookDtoRequest = new NewBookDtoRequest("title", 1111, 1L, 2L);
+        final String title = UUID.randomUUID().toString();
+        final Integer createYear = 1111;
+        final Long authorId = 1L;
+        final Long genreId = 2L;
 
         mockMvc.perform(post("/books/add")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("title", newBookDtoRequest.getTitle())
-                        .param("createdYear", String.valueOf(newBookDtoRequest.getCreatedYear()))
-                        .param("authorId", String.valueOf(newBookDtoRequest.getAuthorId()))
-                        .param("genreId", String.valueOf(newBookDtoRequest.getGenreId()))
+                        .param("title", title)
+                        .param("createdYear", String.valueOf(createYear))
+                        .param("authorId", String.valueOf(authorId))
+                        .param("genreId", String.valueOf(genreId))
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/books"));
 
-        Mockito.verify(bookDtoMapper, Mockito.times(1)).toBookFields(argThat(
+        Mockito.verify(bookDtoMapper, Mockito.times(1)).newBookRequestDtoToBookFields(argThat(
                         actualBookDtoRequest ->
-                                newBookDtoRequest.getTitle().equals(actualBookDtoRequest.getTitle()) &&
-                                        newBookDtoRequest.getCreatedYear().equals(actualBookDtoRequest.getCreatedYear()) &&
-                                        newBookDtoRequest.getAuthorId().equals(actualBookDtoRequest.getAuthorId()) &&
-                                        newBookDtoRequest.getGenreId().equals(actualBookDtoRequest.getGenreId())
+                                title.equals(actualBookDtoRequest.getTitle()) &&
+                                        createYear.equals(actualBookDtoRequest.getCreatedYear()) &&
+                                        authorId.equals(actualBookDtoRequest.getAuthorId()) &&
+                                        genreId.equals(actualBookDtoRequest.getGenreId())
                 )
         );
         Mockito.verify(bookService, Mockito.times(1)).addBook(ArgumentMatchers.any());
@@ -85,14 +93,14 @@ class BookControllerTest {
     @Test
     @DisplayName("Отправка не корректных данных книги должно вернуть страницу с ошибками")
     public void sendingIncorrectBookDataShouldReturnPageWithErrors() throws Exception {
-        NewBookDtoRequest newBookDtoRequest = new NewBookDtoRequest("", 1111, -1L, 2L);
+        NewBookRequestDto newBookRequestDto = new NewBookRequestDto("", 1111, -1L, 2L);
 
         mockMvc.perform(post("/books/add")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("title", newBookDtoRequest.getTitle())
-                        .param("createdYear", String.valueOf(newBookDtoRequest.getCreatedYear()))
-                        .param("authorId", String.valueOf(newBookDtoRequest.getAuthorId()))
-                        .param("genreId", String.valueOf(newBookDtoRequest.getGenreId()))
+                        .param("title", newBookRequestDto.getTitle())
+                        .param("createdYear", String.valueOf(newBookRequestDto.getCreatedYear()))
+                        .param("authorId", String.valueOf(newBookRequestDto.getAuthorId()))
+                        .param("genreId", String.valueOf(newBookRequestDto.getGenreId()))
                 )
                 .andExpect(status().isOk())
                 .andExpect(view().name("book-add"));
@@ -101,21 +109,33 @@ class BookControllerTest {
     }
 
     @Test
-    @DisplayName("Отправка корректного названия для изменение меняет название книги")
-    public void sendingCorrectTitleShouldChangeTitleBook() throws Exception {
+    @DisplayName("Отправка корректных данных книги для изменения должен изменить книгу")
+    public void sendingCorrectBookDataToEditBookShouldChangeBook() throws Exception {
         final Long bookId = 1L;
-        final String newTitle = UUID.randomUUID().toString();
+        final String title = UUID.randomUUID().toString();
+        final Integer createYear = 1111;
+        final Long authorId = 2L;
+        final Long genreId = 3L;
 
         mockMvc.perform(post("/books/edit?id=" + bookId)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("bookId", String.valueOf(bookId))
-                        .param("title", newTitle)
+                        .param("id", String.valueOf(bookId))
+                        .param("title", title)
+                        .param("createdYear", String.valueOf(createYear))
+                        .param("authorId", String.valueOf(authorId))
+                        .param("genreId", String.valueOf(genreId))
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/books"));
 
-        Mockito.verify(bookService, Mockito.times(1)).updateBookTitle(
-                Pair.of(bookId, newTitle)
+        Mockito.verify(bookDtoMapper, Mockito.times(1)).bookChangeRequestDtoToBookFields(argThat(
+                        actualBookDtoRequest ->
+                                title.equals(actualBookDtoRequest.getTitle()) &&
+                                        createYear.equals(actualBookDtoRequest.getCreatedYear()) &&
+                                        authorId.equals(actualBookDtoRequest.getAuthorId()) &&
+                                        genreId.equals(actualBookDtoRequest.getGenreId())
+                )
         );
+        Mockito.verify(bookService, Mockito.times(1)).changeBook(ArgumentMatchers.any());
     }
 }

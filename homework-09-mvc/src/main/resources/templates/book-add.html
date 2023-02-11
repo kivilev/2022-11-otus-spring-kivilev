@@ -61,19 +61,19 @@
     </div>
 
     <div class="row">
-        <label for="book-author-input">Author Id:</label>
-        <input id="book-author-input" name="authorId" type="text" value=""/>
-<!--
-         <div class="errors" th:if="${#fields.hasErrors('authorId')}" th:errors="*{authorId}">Wrong book author id error</div>
--->
+        <label for="book-author-input">Author:</label>
+        <select id="book-author-input" class="form-control"  name="authorId">
+            <option value="0">select author</option>
+            <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"></option>
+        </select>
     </div>
 
     <div class="row">
-        <label for="book-genre-input">Genre Id:</label>
-        <input id="book-genre-input" name="genreId" type="text" value=""/>
-<!--
-         <div class="errors" th:if="${#fields.hasErrors('genreId')}" th:errors="*{genreId}">Wrong book genre id error</div>
--->
+        <label for="book-genre-input">Genre:</label>
+        <select id="book-genre-input" class="form-control" name="genreId">
+            <option value="0">select genre</option>
+            <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
+        </select>
     </div>
 
     <div class="row">

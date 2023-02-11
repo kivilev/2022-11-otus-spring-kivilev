@@ -16,5 +16,7 @@ public interface BookService {
 
     void updateBookTitle(Pair<Long, String> updateData);
 
+    Book changeBook(Map<BookFields, Object> bookFields);
+
     Book getBook(long id);
 }
