@@ -51,6 +51,9 @@ allprojects {
             dependency 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.4.11'
             dependency "com.github.cloudyrock.mongock:mongock-spring-v5:$mongockVersion"
             dependency "com.github.cloudyrock.mongock:mongodb-springdata-v3-driver:$mongockVersion"
+            dependency "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-starter-thymeleaf:$springBootVersion"
+            dependency "org.springframework.boot:spring-boot-starter-validation:$springBootVersion"
         }
     }
 
