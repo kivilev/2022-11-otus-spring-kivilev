@@ -54,6 +54,7 @@ allprojects {
             dependency "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
             dependency "org.springframework.boot:spring-boot-starter-thymeleaf:$springBootVersion"
             dependency "org.springframework.boot:spring-boot-starter-validation:$springBootVersion"
+            dependency "org.webjars:jquery:3.5.1"
         }
     }
 
