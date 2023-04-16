@@ -6,3 +6,7 @@
 
 **Результат**: обёртка приложения в Docker  
 
+Команда:  
+docker-compose up --build  
+docker-compose down
+

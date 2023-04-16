@@ -1,4 +1,8 @@
+drop table if exists book_comment;
+drop table if exists book;
 drop table if exists genre;
+drop table if exists author;
+
 create table genre
 (
     id   bigserial primary key,
@@ -6,7 +10,6 @@ create table genre
 );
 create unique index genre_name_unq on genre (name);
 
-drop table if exists author;
 create table author
 (
     id       bigserial primary key,
@@ -15,7 +18,6 @@ create table author
     deathday date
 );
 
-drop table if exists book;
 create table book
 (
     id           bigserial primary key,
@@ -30,7 +32,6 @@ create table book
 create index book_author_id_idx on book (author_id);
 create index book_genre_id_idx on book (genre_id);
 
-drop table if exists book_comment;
 create table book_comment
 (
     id           bigserial primary key,
