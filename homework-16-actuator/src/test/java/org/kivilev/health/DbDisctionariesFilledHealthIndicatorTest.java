@@ -11,7 +11,7 @@ import org.kivilev.dao.repository.HealthCheckDao;
 import org.mockito.Mockito;
 import org.springframework.boot.actuate.health.Health;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DbDisctionariesFilledHealthIndicatorTest {
     private final HealthCheckDao healthCheckDao = Mockito.mock(HealthCheckDao.class);
