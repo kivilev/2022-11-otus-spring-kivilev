@@ -1,6 +1,7 @@
 package org.kivilev.config;
 
 import com.google.common.cache.CacheBuilder;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -22,8 +23,8 @@ public class ApplicationConfig {
         return Clock.systemUTC();
     }
 
-
     @Bean
+    @SuppressFBWarnings
     public CacheManager currencyRateCacheManager(CurrencyConfig currencyConfig) {
         return new ConcurrentMapCacheManager() {
             @Override
