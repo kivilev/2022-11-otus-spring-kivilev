@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5455/hw-db}
+    username: ${SPRING_DATASOURCE_USERNAME:hw_db_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:hw_db_user_password}
+  sql:
+    init:
+      mode: always
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include:
+          - metrics
+          - logfile
+          - health
+          - info
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+      show-components: always
+      status:
+        order: "fatal,down,out-of-service,unknown,up"
+    logfile:
+      enabled: true
+    metrics:
+      enabled: true
+      cache:
+        time-to-live: "5s"
