@@ -16,3 +16,7 @@ logging:
   level:
     root: INFO
     org.springframework: INFO
+
+currency-rates:
+  url: https://www.cbr-xml-daily.ru/latest.js
+  ttl: PT10S

@@ -1,35 +1,30 @@
-<!--
-  ~ Copyright (c) 2023.
-  ~ Author: Kivilev Denis <kivilev.d@gmail.com>
-  -->
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>List of all persons</title>
+    <title>List of all rates</title>
     <style type="text/css">
         body {
             padding: 50px;
         }
 
-        .persons {
+        .rates {
             border: 1px solid steelblue;
             width: 300px;
             border-collapse: collapse;
         }
 
-        .persons tr td, th {
+        .rates tr td, th {
             padding: 5px;
             border: 1px solid steelblue;
         }
 
-        .persons td:last-child, td:first-child {
+        .rates td:last-child, td:first-child {
             width: 50px;
         }
 
         h3 {
-            background-image: url("listmark.png");
+            background-image: url("../static/listmark.png");
             background-repeat: no-repeat;
             padding: 2px;
             padding-left: 30px;
@@ -46,27 +41,37 @@
         }
 
     </style>
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 
-<h3>Menu:</h3>
+<h3>rates:</h3>
 
-<table class="main">
+<table class="Currency rates">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Rate</th>
+    </tr>
+    </thead>
     <tbody>
-    <tr>
-
-        <td><a href="/authors">Authors</a></td>
-    </tr>
-    <tr>
-        <td><a href="/genres">Genres</a></td>
-    </tr>
-    <tr>
-        <td><a href="/books">Books</a></td>
-    </tr>
-    <tr>
-        <td><a href="/currency-rates">Currency rates</a></td>
-    </tr>
     </tbody>
 </table>
+
+<script>
+    $(function () {
+        $.get('/api/v1/currency-rates').done(function (rates) {
+            rates.forEach(function (rate) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${rate.name}</td>
+                        <td>${rate.rate}</td>
+                    </tr>
+                `)
+            });
+        })
+    });
+</script>
+
 </body>
 </html>
