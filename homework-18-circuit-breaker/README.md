@@ -13,6 +13,18 @@
 - кэширование запросов раз в 10 секунд;
 - использование паттерна Circuit Breaker.
 
+**Данные для диагностики:**
+1. http://localhost:8080/actuator/circuitbreakers/
+2. http://localhost:8080/actuator/circuitbreakerevents/
+3. http://localhost:8080/actuator/caches/
+
+Работа предохранителя в нормальном режиме:  
+![](good.png)
+
+Предохранитель отрабатывает отсутствие подключения:  
+![](bad.png)
+
+
 Команды:  
 docker-compose up --build  
 docker-compose down
