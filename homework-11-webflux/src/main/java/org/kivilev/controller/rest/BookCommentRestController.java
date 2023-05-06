@@ -3,14 +3,18 @@
  * Author: Kivilev Denis <kivilev.d@gmail.com>
  */
 
-package org.kivilev.rest;
+/*
+ * Copyright (c) 2023.
+ * Author: Kivilev Denis <kivilev.d@gmail.com>
+ */
+
+package org.kivilev.controller.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.kivilev.controller.dto.NewCommentRequestDto;
 import org.kivilev.model.BookComment;
 import org.kivilev.service.BookCommentService;
-import org.kivilev.service.BookService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,12 +30,10 @@ import java.util.List;
 public class BookCommentRestController {
 
     private final BookCommentService bookCommentService;
-    private final BookService bookService;
 
     @GetMapping("/api/v1/comments")
-    public List<BookComment> listComments(@RequestParam("bookId") Long bookId) {
-        var book = bookService.getBook(bookId);
-        return book.getComments();
+    public List<BookComment> listComments(@RequestParam("bookId") String bookId) {
+        return bookCommentService.getAllComments(bookId);
     }
 
     @PostMapping("/api/v1/comments")
@@ -40,9 +42,9 @@ public class BookCommentRestController {
     }
 
     @DeleteMapping("/api/v1/comments")
-    public void removeComment(@Valid @RequestParam("bookId") Long bookId,
-                                @RequestParam("commentId") Long commentId) {
-        bookCommentService.removeComment(bookId, commentId);
+    public void removeComment(@Valid @RequestParam("bookId") String bookId,
+                              @RequestParam("commentId") String commentId) {
+        bookCommentService.removeComment(commentId);
     }
 }
 

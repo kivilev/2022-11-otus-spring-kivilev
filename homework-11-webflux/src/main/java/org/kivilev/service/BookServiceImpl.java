@@ -32,8 +32,8 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public Book addBook(Map<BookFields, Object> bookFields) {
 
-        Author author = getAuthor(bookFields);
-        Genre genre = getGenre(bookFields);
+        Author author = authorService.getAuthor((String) bookFields.get(BookFields.AUTHOR_ID));
+        Genre genre = genreService.getGenre((String) bookFields.get(BookFields.GENRE_ID));
 
         Book book = new Book(null,
                 (String) bookFields.get(BookFields.TITLE),
@@ -48,13 +48,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void removeBook(long removeBookId) {
+    public void removeBook(String removeBookId) {
         bookRepository.deleteById(removeBookId);
     }
 
     @Override
     @Transactional
-    public void updateBookTitle(Pair<Long, String> updateData) {
+    public void updateBookTitle(Pair<String, String> updateData) {
         var id = updateData.getLeft();
         var title = updateData.getRight();
 
@@ -66,29 +66,24 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book changeBook(Map<BookFields, Object> bookFields) {
-        var bookOptional = bookRepository.findById((Long) bookFields.get(BookFields.ID));
-        var book = bookOptional.orElseThrow(ObjectNotFoundException::new);
-
-        book.setTitle((String) bookFields.get(BookFields.TITLE));
-        book.setCreatedYear((Integer) bookFields.get(BookFields.CREATED_YEAR));
-        book.setAuthor(getAuthor(bookFields));
-        book.setGenre(getGenre(bookFields));
-
-        return bookRepository.save(book);
-    }
-
-    @Override
-    public Book getBook(long id) {
+    public Book getBook(String id) {
         var bookOptional = bookRepository.findById(id);
         return bookOptional.orElseThrow(ObjectNotFoundException::new);
     }
 
-    private Author getAuthor(Map<BookFields, Object> bookFields) {
-        return authorService.getAuthor((Long) bookFields.get(BookFields.AUTHOR_ID));
-    }
+    @Override
+    public Book changeBook(Map<BookFields, Object> bookFields) {
+        var bookOptional = bookRepository.findById((String) bookFields.get(BookFields.ID));
+        var book = bookOptional.orElseThrow(ObjectNotFoundException::new);
 
-    private Genre getGenre(Map<BookFields, Object> bookFields) {
-        return genreService.getGenre((Long) bookFields.get(BookFields.GENRE_ID));
+        Author author = authorService.getAuthor((String) bookFields.get(BookFields.AUTHOR_ID));
+        Genre genre = genreService.getGenre((String) bookFields.get(BookFields.GENRE_ID));
+
+        book.setTitle((String) bookFields.get(BookFields.TITLE));
+        book.setCreatedYear((Integer) bookFields.get(BookFields.CREATED_YEAR));
+        book.setAuthor(author);
+        book.setGenre(genre);
+
+        return bookRepository.save(book);
     }
 }

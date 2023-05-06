@@ -27,7 +27,7 @@ public class BookController {
     }
 
     @GetMapping("books/edit")
-    public String editPage(@RequestParam("id") long id, Model model) {
+    public String editPage(@RequestParam("id") String id, Model model) {
         var book = bookService.getBook(id);
         model.addAttribute("book", book);
         fillModelWithDictionaries(model);

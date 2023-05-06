@@ -12,11 +12,11 @@ public interface BookService {
 
     Book addBook(Map<BookFields, Object> bookFields);
 
-    void removeBook(long removeBookId);
+    void removeBook(String removeBookId);
 
-    void updateBookTitle(Pair<Long, String> updateData);
+    void updateBookTitle(Pair<String, String> updateData);
 
     Book changeBook(Map<BookFields, Object> bookFields);
 
-    Book getBook(long id);
+    Book getBook(String id);
 }

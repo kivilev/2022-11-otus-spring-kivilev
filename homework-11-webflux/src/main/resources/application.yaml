@@ -1,16 +1,23 @@
 spring:
-  datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5455/hw-db}
-    username: ${SPRING_DATASOURCE_USERNAME:hw_db_user}
-    password: ${SPRING_DATASOURCE_PASSWORD:hw_db_user_password}
-  sql:
-    init:
-      mode: always
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-    show-sql: true
+  data:
+    mongodb:
+      #url: mongodb://root:example@localhost:27017/
+      uri: ${SPRING_DATASOURCE_URL:mongodb://root:example@localhost:27017/}
+      database: library
+      #username: root
+      #password: example
+
+mongock:
+  #runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - org.kivilev.mongock.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+
+library:
+  count-top-comments: 2
 
 logging:
   level:

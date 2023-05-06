@@ -11,16 +11,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
-
     private final AuthorRepository authorRepository;
 
     @Override
     public List<Author> getAllAuthors() {
-        return authorRepository.findAll();
+        return (List<Author>) authorRepository.findAll();
     }
 
     @Override
-    public Author getAuthor(Long id) {
+    public Author getAuthor(String id) {
         var authorOptional = authorRepository.findById(id);
         return authorOptional.orElseThrow(ObjectNotFoundException::new);
     }

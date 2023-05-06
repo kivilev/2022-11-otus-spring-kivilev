@@ -15,11 +15,11 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public List<Genre> getAllGenres() {
-        return genreRepository.findAll();
+        return (List<Genre>) genreRepository.findAll();
     }
 
     @Override
-    public Genre getGenre(Long id) {
+    public Genre getGenre(String id) {
         var genreOptional = genreRepository.findById(id);
         return genreOptional.orElseThrow(ObjectNotFoundException::new);
     }

@@ -1,29 +1,40 @@
 version: "3.9"
 services:
-  hw11-pg-db:
-    image: postgres:14
-    container_name: hw11-pg-db-docker
+  mongo:
+    image: mongo:6.0.5
+    restart: always
+    container_name: hw11-mongo-docker
     ports:
-      - "5457:5432"
+      - 27017:27017
     environment:
-      POSTGRES_DB: hw-db
-      POSTGRES_USER: hw_db_user
-      POSTGRES_PASSWORD: hw_db_user_password
-    restart: unless-stopped
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: library
+    networks:
+      - hw11
+
+  mongo-express:
+    image: mongo-express
+    container_name: hw11-mongo-express
+    restart: always
+    ports:
+      - 8090:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
     networks:
       - hw11
 
   hw11-mvc:
     build: .
     depends_on:
-      - hw-pg-db
+      - mongo
     ports:
       - "9000:8080"
     restart: unless-stopped
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://hw11-pg-db:5432/hw-db
-      SPRING_DATASOURCE_USERNAME: hw_db_user
-      SPRING_DATASOURCE_PASSWORD: hw_db_user_password
+      SPRING_DATASOURCE_URL: mongodb://root:example@mongo:27017/
     networks:
       - hw11
 

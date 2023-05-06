@@ -3,7 +3,12 @@
  * Author: Kivilev Denis <kivilev.d@gmail.com>
  */
 
-package org.kivilev.rest;
+/*
+ * Copyright (c) 2023.
+ * Author: Kivilev Denis <kivilev.d@gmail.com>
+ */
+
+package org.kivilev.controller.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.kivilev.model.Author;

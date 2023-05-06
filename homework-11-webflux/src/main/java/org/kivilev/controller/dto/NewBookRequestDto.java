@@ -24,8 +24,8 @@ public class NewBookRequestDto {
     private Integer createdYear;
     @NotNull
     @Positive
-    private Long authorId;
+    private String authorId;
     @NotNull
     @Positive
-    private Long genreId;
+    private String genreId;
 }

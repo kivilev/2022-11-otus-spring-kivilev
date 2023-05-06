@@ -17,7 +17,7 @@ import javax.validation.constraints.Positive;
 @Getter
 public class BookChangeRequestDto {
     @NotNull
-    private Long id;
+    private String id;
     @NotBlank
     private String title;
     @NotNull
@@ -26,8 +26,8 @@ public class BookChangeRequestDto {
     private Integer createdYear;
     @NotNull
     @Positive
-    private Long authorId;
+    private String authorId;
     @NotNull
     @Positive
-    private Long genreId;
+    private String genreId;
 }

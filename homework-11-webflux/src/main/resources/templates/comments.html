@@ -86,9 +86,10 @@
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 }})
-                .then(rawResponse => rawResponse.json());
-
-            getCommentList();
+                .then(rawResponse => {
+                    rawResponse.json();
+                    getCommentList();
+                });
         }
 
         function saveComment() {
@@ -107,9 +108,10 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(comment)})
-                .then(rawResponse => rawResponse.json());
-
-            getCommentList();
+                .then(rawResponse => {
+                    rawResponse.json();
+                    getCommentList();
+                });
         }
     </script>
 </head>

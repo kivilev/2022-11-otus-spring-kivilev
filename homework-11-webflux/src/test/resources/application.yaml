@@ -1,16 +1,19 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-  sql:
-    init:
-      mode: always
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-    show-sql: false
+  data:
+    mongodb:
+      database: library
+  mongodb:
+    embedded:
+      version: 5.0.0
 
-logging:
-  level:
-    root: DEBUG
-    org.springframework: DEBUG
+mongock:
+  #runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - org.kivilev.mongock.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+
+library:
+  count-top-comments: 2

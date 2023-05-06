@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class NewCommentRequestDto {
     @NotNull
-    Long bookId;
+    String bookId;
     @NotBlank
     String text;
 }

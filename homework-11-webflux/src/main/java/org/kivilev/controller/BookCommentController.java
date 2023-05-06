@@ -19,7 +19,7 @@ public class BookCommentController {
     private final BookService bookService;
 
     @GetMapping("comments")
-    public String listComments(@RequestParam("bookId") Long bookId, Model model) {
+    public String listComments(@RequestParam("bookId") String bookId, Model model) {
         var book = bookService.getBook(bookId);
         model.addAttribute("book_id", book.getId());
         model.addAttribute("book_title", book.getTitle());
