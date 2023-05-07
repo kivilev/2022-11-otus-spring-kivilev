@@ -11,40 +11,48 @@
 package org.kivilev.controller.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.kivilev.controller.dto.NewCommentRequestDto;
+import org.kivilev.dao.repository.BookCommentRepository;
+import org.kivilev.exception.ObjectNotFoundException;
 import org.kivilev.model.BookComment;
-import org.kivilev.service.BookCommentService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @RestController
 @RequiredArgsConstructor
 public class BookCommentRestController {
-
-    private final BookCommentService bookCommentService;
+    private final BookCommentRepository bookCommentRepository;
+    private final Clock clock;
 
     @GetMapping("/api/v1/comments")
-    public List<BookComment> listComments(@RequestParam("bookId") String bookId) {
-        return bookCommentService.getAllComments(bookId);
+    public Flux<BookComment> listComments(@RequestParam("bookId") String bookId) {
+        return bookCommentRepository.findAllByBookId(bookId);
     }
 
     @PostMapping("/api/v1/comments")
     public void addComment(@Valid @RequestBody NewCommentRequestDto dto) {
-        bookCommentService.addComment(Pair.of(dto.getBookId(), dto.getText()));
+        Mono.just(dto)
+                .map(d -> new BookComment(d.getText(), LocalDateTime.now(clock).truncatedTo(ChronoUnit.MILLIS), d.getBookId()))
+                .flatMap(bookCommentRepository::save)
+                .subscribe();
     }
 
-    @DeleteMapping("/api/v1/comments")
-    public void removeComment(@Valid @RequestParam("bookId") String bookId,
-                              @RequestParam("commentId") String commentId) {
-        bookCommentService.removeComment(commentId);
+    @DeleteMapping("/api/v1/comments/{id}")
+    public Mono<Void> removeComment(@PathVariable("id") String commentId) {
+        return bookCommentRepository.findById(commentId)
+                .switchIfEmpty(Mono.error(ObjectNotFoundException::new))
+                .flatMap(bookCommentRepository::delete);
     }
 }
-

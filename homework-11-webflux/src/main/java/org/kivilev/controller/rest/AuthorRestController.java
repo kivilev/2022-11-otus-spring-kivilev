@@ -11,20 +11,19 @@
 package org.kivilev.controller.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.kivilev.dao.repository.AuthorRepository;
 import org.kivilev.model.Author;
-import org.kivilev.service.AuthorService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequiredArgsConstructor
 public class AuthorRestController {
-    private final AuthorService authorService;
+    private final AuthorRepository authorRepository;
 
     @GetMapping("/api/v1/authors")
-    public List<Author> listAuthors() {
-        return authorService.getAllAuthors();
+    public Flux<Author> listAuthors() {
+        return authorRepository.findAll();
     }
 }

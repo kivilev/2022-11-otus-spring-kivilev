@@ -6,7 +6,7 @@
 package org.kivilev.dao.repository;
 
 import org.kivilev.model.Genre;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
-public interface GenreRepository extends MongoRepository<Genre, String> {
+public interface GenreRepository extends ReactiveMongoRepository<Genre, String> {
 }

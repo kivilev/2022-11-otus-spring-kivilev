@@ -24,7 +24,7 @@
         }
 
         h3 {
-            background-image: url("../static/listmark.png");
+            background-image: url("listmark.png");
             background-repeat: no-repeat;
             padding: 2px;
             padding-left: 30px;
@@ -34,7 +34,7 @@
 
     <style type="text/css" th:inline="text">
         [[h3]] {
-            background-image: url([[@{/listmark.png}]]);
+            background-image: url([[@{listmark.png}]]);
             background-repeat: no-repeat;
             padding: 2px;
             padding-left: 30px;
@@ -79,8 +79,8 @@
                         <td>${book.id}</td>
                         <td>${book.title}</td>
                         <td>${book.createdYear}</td>
-                        <td>${book.genre.name}</td>
-                        <td>${book.author.name}</td>
+                        <td>${book.genreName}</td>
+                        <td>${book.authorName}</td>
                         <td>
                             <a href="/books/edit?id=${book.id}">Edit</a>
                         </td>

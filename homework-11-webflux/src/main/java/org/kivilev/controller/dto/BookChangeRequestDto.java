@@ -7,6 +7,7 @@ package org.kivilev.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
@@ -15,6 +16,7 @@ import javax.validation.constraints.Positive;
 
 @AllArgsConstructor
 @Getter
+@NoArgsConstructor
 public class BookChangeRequestDto {
     @NotNull
     private String id;
@@ -25,9 +27,7 @@ public class BookChangeRequestDto {
     @Digits(integer = 4, fraction = 0)
     private Integer createdYear;
     @NotNull
-    @Positive
     private String authorId;
     @NotNull
-    @Positive
     private String genreId;
 }

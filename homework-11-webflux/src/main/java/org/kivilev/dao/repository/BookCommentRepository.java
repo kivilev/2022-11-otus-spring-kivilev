@@ -7,13 +7,12 @@ package org.kivilev.dao.repository;
 
 import org.kivilev.model.BookComment;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
 
-import java.util.List;
+public interface BookCommentRepository extends ReactiveMongoRepository<BookComment, String> {
+    Flux<BookComment> findAllByBookId(String bookId, PageRequest pageRequest);
 
-public interface BookCommentRepository extends MongoRepository<BookComment, String> {
-    List<BookComment> findAllByBookId(String bookId, PageRequest pageRequest);
-
-    List<BookComment> findAllByBookId(String bookId);
+    Flux<BookComment> findAllByBookId(String bookId);
 
 }

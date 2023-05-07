@@ -1,25 +1,11 @@
 spring:
   data:
     mongodb:
-      #url: mongodb://root:example@localhost:27017/
       uri: ${SPRING_DATASOURCE_URL:mongodb://root:example@localhost:27017/}
       database: library
-      #username: root
-      #password: example
-
-mongock:
-  #runner-type: "ApplicationRunner" # default
-  runner-type: "InitializingBean"
-  change-logs-scan-package:
-    - org.kivilev.mongock.changelog
-  mongo-db:
-    write-concern:
-      journal: false
-
-library:
-  count-top-comments: 2
 
 logging:
   level:
     root: INFO
     org.springframework: INFO
+

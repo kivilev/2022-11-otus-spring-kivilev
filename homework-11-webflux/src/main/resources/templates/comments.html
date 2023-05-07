@@ -24,7 +24,7 @@
         }
 
         h3 {
-            background-image: url("../static/listmark.png");
+            background-image: url("listmark.png");
             background-repeat: no-repeat;
             padding: 2px;
             padding-left: 30px;
@@ -34,7 +34,7 @@
 
     <style type="text/css" th:inline="text">
         [[h3]] {
-            background-image: url([[@{/listmark.png}]]);
+            background-image: url([[@{listmark.png}]]);
             background-repeat: no-repeat;
             padding: 2px;
             padding-left: 30px;
@@ -70,7 +70,7 @@
                         <td>${comment.createDateTime}</td>
                         <td>
                             <form id="delete-form">
-                                <button type="button" onclick="deleteComment('${bookId}', '${comment.id}')">Delete</button>
+                                <button type="button" onclick="deleteComment('${comment.id}')">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -79,8 +79,8 @@
             })
         }
 
-        function deleteComment(bookId, commentId) {
-            fetch("/api/v1/comments?bookId="+bookId+"&commentId="+commentId, {
+        function deleteComment(commentId) {
+            fetch("/api/v1/comments/"+commentId, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
@@ -93,11 +93,11 @@
         }
 
         function saveComment() {
-            const bookIdInput = document.getElementById("book-id-input")
+            const bookIdInput = getUrlParameter("bookId");
             const commentTextInput = document.getElementById("comment-text-input")
 
             const comment = {
-                bookId: bookIdInput.value,
+                bookId: bookIdInput,
                 text : commentTextInput.value
             }
 
@@ -117,7 +117,7 @@
 </head>
 
 <body>
-
+<input type="hidden" name="bookId" id="bookId">
 <h2 th:text="${book_title}">Book title</h2>
 
 <h3>Comments:</h3>

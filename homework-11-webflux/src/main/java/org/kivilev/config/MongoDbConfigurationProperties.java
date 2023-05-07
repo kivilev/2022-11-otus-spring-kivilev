@@ -6,16 +6,15 @@
 package org.kivilev.config;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
-@ConfigurationProperties(prefix = "library")
+@ConfigurationProperties(prefix = "spring.data.mongodb")
 @ConstructorBinding
 @Getter
-public class LibraryProperties {
-    private final int countTopComments;
-
-    public LibraryProperties(int countTopComments) {
-        this.countTopComments = countTopComments;
-    }
+@RequiredArgsConstructor
+public class MongoDbConfigurationProperties {
+    private final String uri;
+    private final String database;
 }

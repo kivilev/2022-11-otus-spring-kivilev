@@ -6,7 +6,7 @@
 package org.kivilev.dao.repository;
 
 import org.kivilev.model.Author;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
-public interface AuthorRepository extends MongoRepository<Author, String> {
+public interface AuthorRepository extends ReactiveMongoRepository<Author, String> {
 }
