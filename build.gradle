@@ -22,7 +22,7 @@ idea {
 
 def mongockVersion = "4.3.8"
 def springBootVersion = "2.7.6"
-def mongodbReactivestreamsVersion = "4.4.1"
+
 
 allprojects {
     group "org.kivilev"
@@ -37,7 +37,6 @@ allprojects {
         dependencies {
             imports {
                 mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
-                mavenBom 'io.mongock:mongock-bom:5.2.4'
             }
 
             dependency 'org.springframework:spring-context:5.3.24'
@@ -53,9 +52,6 @@ allprojects {
             dependency "com.github.cloudyrock.mongock:mongodb-springdata-v3-driver:$mongockVersion"
             dependency "org.webjars:jquery:3.5.1"
 
-            dependency "org.mongodb:mongodb-driver-reactivestreams:$mongodbReactivestreamsVersion"
-            dependency "org.mongodb:mongodb-driver-core:$mongodbReactivestreamsVersion"
-            dependency "org.mongodb:bson:$mongodbReactivestreamsVersion"
             dependency 'io.projectreactor:reactor-test:3.5.5'
         }
     }

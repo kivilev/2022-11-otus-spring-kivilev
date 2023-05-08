@@ -7,7 +7,6 @@ package org.kivilev.controller.rest;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kivilev.config.ApplicationConfig;
 import org.kivilev.controller.dto.NewCommentRequestDto;
 import org.kivilev.dao.repository.BookCommentRepository;
 import org.kivilev.model.BookComment;
@@ -35,7 +34,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @WebFluxTest(controllers = BookCommentRestController.class)
-@Import(ApplicationConfig.class)
+@Import(TestAppConfig.class)
 class BookCommentRestControllerTest {
     @MockBean
     BookCommentRepository repository;

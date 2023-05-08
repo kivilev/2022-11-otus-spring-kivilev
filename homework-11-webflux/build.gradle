@@ -8,6 +8,8 @@ bootJar {
     archiveBaseName = 'app'
 }
 
+def mongodbReactivestreamsVersion = "4.4.1"
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
@@ -20,15 +22,15 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    //testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
-
-    implementation 'io.mongock:mongock-springboot'
-    implementation 'io.mongock:mongodb-reactive-driver'
-    implementation "org.mongodb:mongodb-driver-reactivestreams"
-    implementation "org.mongodb:mongodb-driver-core"
-    implementation "org.mongodb:bson"
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
 
     testImplementation 'io.projectreactor:reactor-test'
+
+    implementation 'io.mongock:mongock-springboot:5.2.4'
+    implementation 'io.mongock:mongodb-reactive-driver:5.2.4'
+    implementation "org.mongodb:mongodb-driver-reactivestreams:$mongodbReactivestreamsVersion"
+    implementation "org.mongodb:mongodb-driver-core:$mongodbReactivestreamsVersion"
+    implementation "org.mongodb:bson:$mongodbReactivestreamsVersion"
 }
 
 test {

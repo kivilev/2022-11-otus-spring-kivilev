@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      database: library
+  mongodb:
+    embedded:
+      version: 5.0.0
