@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all comments</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .comments {
+            border: 1px solid steelblue;
+            width: 300px;
+            border-collapse: collapse;
+        }
+
+        .comments tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .comments td:last-child, td:first-child {
+            width: 50px;
+        }
+
+        h3 {
+            background-image: url("listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+    </style>
+
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+
+        function getCommentList() {
+            var bookId = getUrlParameter("bookId");
+            $('.row-comments').remove();
+
+            $.get('/api/v1/comments?bookId=' + bookId).done(function (comments) {
+                comments.forEach(function (comment) {
+                    $('tbody').append(`
+                    <tr class="row-comments">
+                        <td>${comment.id}</td>
+                        <td>${comment.text}</td>
+                        <td>${comment.createDateTime}</td>
+                        <td>
+                            <form id="delete-form">
+                                <button type="button" onclick="deleteComment('${comment.id}')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                `)
+                });
+            })
+        }
+
+        function deleteComment(commentId) {
+            fetch("/api/v1/comments/"+commentId, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }})
+                .then(rawResponse => {
+                    rawResponse.json();
+                    getCommentList();
+                });
+        }
+
+        function saveComment() {
+            const bookIdInput = getUrlParameter("bookId");
+            const commentTextInput = document.getElementById("comment-text-input")
+
+            const comment = {
+                bookId: bookIdInput,
+                text : commentTextInput.value
+            }
+
+            fetch("/api/v1/comments", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(comment)})
+                .then(rawResponse => {
+                    rawResponse.json();
+                    getCommentList();
+                });
+        }
+    </script>
+</head>
+
+<body>
+<input type="hidden" name="bookId" id="bookId">
+<h2 th:text="${book_title}">Book title</h2>
+
+<h3>Comments:</h3>
+<table class="comments">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Date time created</th>
+        <th>Text</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr>
+        <td colspan="4">
+
+            <form id="edit-form">
+                <h4>Add new comment:</h4>
+
+                <div class="row">
+                    <input type="hidden" name = "bookId" id="book-id-input" th:value="${book_id}" value="1"/>
+                </div>
+
+                <div class="row">
+                    <label for="comment-text-input">Text:</label>
+                    <input id="comment-text-input" name="text" type="text" value=""/>
+                </div>
+                <br/>
+                <div class="row">
+                    <button type="button" onclick="saveComment()">Save</button>
+                    <a href="/books" >
+                        <button type="button">Return to books</button>
+                    </a>
+                </div>
+            </form>
+
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+        getCommentList()
+    });
+</script>
+<pre id = "saved-comment"></pre>
+</body>
+</html>

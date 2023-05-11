@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all genres</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .books {
+            border: 1px solid steelblue;
+            width: 300px;
+            border-collapse: collapse;
+        }
+
+        .books tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .books td:last-child, td:first-child {
+            width: 50px;
+        }
+
+        h3 {
+            background-image: url("listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+    </style>
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<h3>books:</h3>
+
+<table class="books">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Created year</th>
+        <th>Genre</th>
+        <th>Author</th>
+        <th>Action</th>
+        <th>Comments</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td colspan="6">
+            <a href="/books/add">Add new book</a>
+            <br/>
+            <a href="/">Return to main</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+        $.get('/api/v1/books').done(function (books) {
+            books.forEach(function (book) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${book.id}</td>
+                        <td>${book.title}</td>
+                        <td>${book.createdYear}</td>
+                        <td>${book.genreName}</td>
+                        <td>${book.authorName}</td>
+                        <td>
+                            <a href="/books/edit?id=${book.id}">Edit</a>
+                        </td>
+                        <td>
+                            <a href="/comments?bookId=${book.id}">All comments</a>
+                        </td>
+                    </tr>
+                `)
+            });
+        })
+    });
+</script>
+
+</body>
+</html>

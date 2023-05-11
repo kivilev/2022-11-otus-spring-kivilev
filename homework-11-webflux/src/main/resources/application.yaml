@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      uri: ${SPRING_DATASOURCE_URL:mongodb://root:example@localhost:27017/}
+      database: library
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+

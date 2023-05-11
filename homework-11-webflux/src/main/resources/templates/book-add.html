@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        h3 {
+            background-image: url("listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+        .errors {
+            color: red;
+        }
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+    </style>
+
+    <script>
+        function saveBook() {
+            const savedPersonContainer = document.getElementById("saved-book")
+            const titleInput = document.getElementById("book-title-input")
+            const createdYearInput = document.getElementById("book-created-year-input")
+            const authorIdInput = document.getElementById("book-author-input")
+            const genreIdInput = document.getElementById("book-genre-input")
+
+            const book = {
+                title: titleInput.value,
+                createdYear : createdYearInput.value,
+                authorId : authorIdInput.value,
+                genreId : genreIdInput.value
+            }
+
+            fetch("/api/v1/books", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(book)})
+                .then(rawResponse => rawResponse.json())
+                .then(json => savedPersonContainer.innerHTML = JSON.stringify(json, null, 4))
+        }
+    </script>
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+<!-- book adding -->
+<form id="add-form">
+    <h3>New book info:</h3>
+
+    <div class="row">
+        <label for="book-title-input">Title:</label>
+        <input id="book-title-input" name="title" type="text" value=""/>
+    </div>
+
+    <div class="row">
+        <label for="book-created-year-input">Created year:</label>
+        <input id="book-created-year-input" name="createdYear" type="text" value=""/>
+    </div>
+
+    <div class="row">
+        <label for="book-author-input">Author:</label>
+        <select id="book-author-input" class="form-control"  name="authorId">
+            <option value="0">select author</option>
+
+        </select>
+    </div>
+
+    <div class="row">
+        <label for="book-genre-input">Genre:</label>
+        <select id="book-genre-input" class="form-control" name="genreId">
+            <option value="0">select genre</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <button type="button" onclick="saveBook()">Save</button>
+        <a href="/books">
+            <button type="button">Cancel</button>
+        </a>
+    </div>
+</form>
+
+<h3>Saved book:</h3>
+<pre id = "saved-book"></pre>
+
+
+<script>
+    const listAuthorsField = document.getElementById('book-author-input');
+    const listGenresField = document.getElementById('book-genre-input');
+
+    $(function () {
+        $.get('/api/v1/genres')
+            .then(genres => {
+                listGenresField.innerHTML = genresSelectFormatter(genres);
+            })
+    });
+    $(function () {
+        $.get('/api/v1/authors')
+            .then(authors => {
+                listAuthorsField.innerHTML = authorsSelectFormatter(authors);
+            })
+    });
+
+    function authorsSelectFormatter(authorsArray) {
+        return `${authorsArray.map((elem) =>
+            `<option value="${elem.id}">${elem.name}</option>`
+        ).join('')}`;
+    }
+
+    function genresSelectFormatter(genresArray) {
+        return `${genresArray.map((elem) =>
+            `<option value="${elem.id}">${elem.name}</option>`
+        ).join('')}`;
+    }
+</script>
+
+</body>
+</html>
