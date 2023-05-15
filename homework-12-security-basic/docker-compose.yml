@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  pg-db:
+    image: postgres:14
+    container_name: hw12-pg-db-docker
+    ports:
+      - "5455:5432"
+    environment:
+      POSTGRES_DB: hw-db
+      POSTGRES_USER: hw_db_user
+      POSTGRES_PASSWORD: hw_db_user_password
+    restart: unless-stopped
+    networks:
+      - hw12
+
+  hw12-mvc:
+    build: .
+    depends_on:
+      - pg-db
+    ports:
+      - "9000:8080"
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://pg-db:5432/hw-db
+      SPRING_DATASOURCE_USERNAME: hw_db_user
+      SPRING_DATASOURCE_PASSWORD: hw_db_user_password
+    networks:
+      - hw12
+
+networks:
+  hw12:
