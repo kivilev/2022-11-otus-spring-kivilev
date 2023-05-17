@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -37,6 +38,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kivilev.controller.ControllerTestUtils.createDefaultBook;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,6 +63,7 @@ class BookControllerTest {
     @Test
     @DisplayName("Получение списка книг должно вернуть книги")
     @SuppressFBWarnings
+    @WithMockUser
     public void gettingAllBooksShouldReturnBooks() throws Exception {
         final int expectedSize = 2;
         var books = List.of(createDefaultBook(1L), createDefaultBook(2L));
@@ -79,6 +82,7 @@ class BookControllerTest {
 
     @Test
     @DisplayName("Отправка корректных данных книги создает книгу")
+    @WithMockUser
     public void sendingCorrectBookDataShouldCreateBook() throws Exception {
         final String title = UUID.randomUUID().toString();
         final Integer createYear = 1111;
@@ -94,6 +98,7 @@ class BookControllerTest {
         mockMvc.perform(post("/api/v1/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(OBJECT_MAPPER.writeValueAsString(dto))
+                        .with(csrf())
                 )
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
@@ -110,7 +115,30 @@ class BookControllerTest {
     }
 
     @Test
+    @DisplayName("Отправка корректных данных книги без авторизации завершается ошибкой")
+    public void sendingCorrectBookDataWithoutAuthorizationShouldCreateBook() throws Exception {
+        final String title = UUID.randomUUID().toString();
+        final Integer createYear = 1111;
+        final Long authorId = 1L;
+        final Long genreId = 2L;
+        NewBookRequestDto dto = new NewBookRequestDto(
+                title,
+                createYear,
+                authorId,
+                genreId
+        );
+
+        mockMvc.perform(post("/api/v1/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(OBJECT_MAPPER.writeValueAsString(dto))
+                        .with(csrf())
+                )
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     @DisplayName("Отправка не корректных данных книги должно вернуть страницу с ошибками")
+    @WithMockUser
     public void sendingIncorrectBookDataShouldReturnPageWithErrors() throws Exception {
         final String title = "";
         final Integer createYear = 1111;
@@ -126,12 +154,14 @@ class BookControllerTest {
         mockMvc.perform(post("/api/v1/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(OBJECT_MAPPER.writeValueAsString(dto))
+                        .with(csrf())
                 )
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     @DisplayName("Отправка корректных данных книги для изменения должен изменить книгу")
+    @WithMockUser
     public void sendingCorrectBookDataToEditBookShouldChangeBook() throws Exception {
         final Long bookId = 1L;
         final String title = UUID.randomUUID().toString();
@@ -144,6 +174,7 @@ class BookControllerTest {
         mockMvc.perform(put("/api/v1/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(OBJECT_MAPPER.writeValueAsString(dto))
+                        .with(csrf())
                 )
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();

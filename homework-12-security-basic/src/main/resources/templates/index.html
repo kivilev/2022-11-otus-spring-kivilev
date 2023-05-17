@@ -3,6 +3,11 @@
   ~ Author: Kivilev Denis <kivilev.d@gmail.com>
   -->
 
+<!--
+  ~ Copyright (c) 2023.
+  ~ Author: Kivilev Denis <kivilev.d@gmail.com>
+  -->
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -49,6 +54,8 @@
 </head>
 <body>
 
+<h2 th:text="${greeting}">Hi, ${userName}!</h2>
+
 <h3>Menu:</h3>
 
 <table class="main">
@@ -65,5 +72,9 @@
     </tr>
     </tbody>
 </table>
+<p>
+    <a href="/login">Login</a>&nbsp;&nbsp;&nbsp;
+    <a href="/logout">Logout</a><br/>
+</p>
 </body>
 </html>

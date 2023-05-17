@@ -6,7 +6,12 @@
 
 **Результат**: приложение с использованием Spring Security  
 
-Команда:  
+Создано два пользователя:  
+* user1, пароль - pass1
+* admin, пароль - pass2
+
+
+#### Запуск и остановка приложения  
 docker-compose up --build  
 docker-compose down
 

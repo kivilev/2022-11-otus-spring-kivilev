@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -34,6 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kivilev.controller.ControllerTestUtils.createDefaultBook;
 import static org.mockito.Mockito.times;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -53,13 +55,14 @@ class BookCommentControllerTest {
     @Test
     @DisplayName("Получение всех комментариев для книги возвращает комментарии")
     @SuppressFBWarnings
+    @WithMockUser
     public void gettingAllBooksShouldReturnBooks() throws Exception {
         final int expectedSize = 2;
         long bookId = 1L;
         var book = createDefaultBook(bookId);
         Mockito.when(bookService.getBook(bookId)).thenReturn(book);
 
-        var content = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/comments?bookId=" + bookId))
+        var content = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/comments/?bookId=" + bookId))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -72,14 +75,16 @@ class BookCommentControllerTest {
 
     @Test
     @DisplayName("Отправка нового комментария создает новый комментарий и добавляет к книге")
+    @WithMockUser
     public void sendingCorrectCommentShouldCreateComment() throws Exception {
         long bookId = 1L;
         final String commentText = UUID.randomUUID().toString();
         NewCommentRequestDto dto = new NewCommentRequestDto(bookId, commentText);
 
-        mockMvc.perform(post("/api/v1/comments")
+        mockMvc.perform(post("/api/v1/comments/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(OBJECT_MAPPER.writeValueAsString(dto))
+                        .with(csrf())
                 )
                 .andExpect(status().isOk());
 
@@ -88,15 +93,30 @@ class BookCommentControllerTest {
 
     @Test
     @DisplayName("Удаление существующего комментария удаляет комментарий")
+    @WithMockUser
     public void deletingRequestShouldDeleteComment() throws Exception {
         long bookId = 1L;
         long commentId = 2L;
 
-        mockMvc.perform(delete(String.format("/api/v1/comments?bookId=%s&commentId=%s", bookId, commentId))
+        mockMvc.perform(delete(String.format("/api/v1/comments/?bookId=%s&commentId=%s", bookId, commentId))
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf())
                 )
                 .andExpect(status().isOk());
 
         Mockito.verify(bookCommentService, times(1)).removeComment(bookId, commentId);
+    }
+
+    @Test
+    @DisplayName("Удаление существующего комментария без авторизации завершается ошибкой")
+    public void deletingRequestWithoutAuthorizationShouldFail() throws Exception {
+        long bookId = 1L;
+        long commentId = 2L;
+
+        mockMvc.perform(delete(String.format("/api/v1/comments/?bookId=%s&commentId=%s", bookId, commentId))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf())
+                )
+                .andExpect(status().isUnauthorized());
     }
 }
