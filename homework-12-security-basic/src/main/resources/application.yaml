@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5455/hw-db}
+    username: ${SPRING_DATASOURCE_USERNAME:hw_db_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:hw_db_user_password}
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
